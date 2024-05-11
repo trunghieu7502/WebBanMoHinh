@@ -1,0 +1,43 @@
+﻿@model IEnumerable<DoAnCoSo_WebBanMoHinh.Models.Company>
+
+@{
+    ViewData["Title"] = "Hãng";
+}
+
+<h1 class="text-center mt-4">DANH SÁCH HÃNG</h1>
+
+<div>
+    <a asp-action="Create">
+        <button class="btn btn-primary">Tạo Hãng Mới</button>
+    </a>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CompName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompName)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">
+                    <button class="btn btn-warning">Sửa</button>
+                </a>
+                <a asp-action="Details" asp-route-id="@item.Id">
+                    <button class="btn btn-primary">Chi Tiết</button>
+                </a>
+                <a asp-action="Delete" asp-route-id="@item.Id">
+                    <button class="btn btn-danger">Xóa</button>
+                </a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

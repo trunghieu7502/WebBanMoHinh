@@ -1,0 +1,59 @@
+﻿@model DoAnCoSo_WebBanMoHinh.Models.Product
+
+@{
+    string pname = Model.Name;
+    ViewData["Title"] = $"{pname} - Admin";
+    var Images = ViewBag.Images;
+}
+
+<h1 class="mt-4">CHI TIẾT SẢN PHẨM</h1>
+
+<section class="py-1">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="@Model.ImageUrl" alt="..." /></div>
+            <div class="col-md-6">
+                <h1 class="display-6 fw-bolder">@Html.DisplayFor(model => model.Name)</h1>
+                <h3>Giá: @Model.Price.ToString("#,##0") VNĐ</h3>
+                <div class="fs-5 mb-2">
+                    <span>Loại sản phẩm: @Html.DisplayFor(model => model.Category.CateName)</span>
+                    <span class="ms-4">Hãng: @Html.DisplayFor(model => model.Company.CompName)</span>
+                </div>
+                <div class="d-flex">
+                    <a asp-area="Admin" asp-controller="ProductsManager" asp-action="Edit" asp-route-id="@Model.Id">
+                        <button class="btn btn-outline-primary flex-shrink-0 me-2" type="button">
+                            Sửa
+                        </button>
+                    </a>
+                    <a asp-area="Admin" asp-controller="ProductsManager" asp-action="Delete" asp-route-id="@Model.Id">
+                        <button class="btn btn-outline-danger flex-shrink-0 me-2" type="button">
+                            Xóa
+                        </button>
+                    </a>
+                    <a asp-area="Admin" asp-controller="ProductsManager" asp-action="Index">
+                        <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                            Trở Về
+                        </button>
+                    </a>
+                </div>
+                <p class="lead">@Html.DisplayFor(model => model.Description)</p>
+            </div>
+        </div>
+    </div>
+    <div class="mb-4">
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Images)
+            </dt>
+            <dd class="col-sm-10">
+                @if (Images != null)
+                {
+                    foreach (var item in Images)
+                    {
+                        <img src="@item.Url" width="200px">
+                    }
+                }
+            </dd>
+        </dl>
+    </div>
+</section>

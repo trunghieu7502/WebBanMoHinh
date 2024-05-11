@@ -1,0 +1,49 @@
+﻿@model DoAnCoSo_WebBanMoHinh.Models.Product
+
+@{
+    string pname = Model.Name;
+    ViewData["Title"] = $"{pname}";
+    var Images = ViewBag.Images;
+}
+
+<h1 class="mt-4">CHI TIẾT SẢN PHẨM</h1>
+
+<section class="py-1">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="@Model.ImageUrl" alt="..." /></div>
+            <div class="col-md-6">
+                <h1 class="display-6 fw-bolder">@Html.DisplayFor(model => model.Name)</h1>
+                <div class="fs-5 mb-5">
+                    <span>@Model.Price.ToString("#,##0") VNĐ</span>
+                    <span class="ms-4">Loại sản phẩm: @Html.DisplayFor(model => model.Category.CateName)</span>
+                    <span class="ms-4">Hãng: @Html.DisplayFor(model => model.Company.CompName)</span>
+                </div>
+                <p class="lead">@Html.DisplayFor(model => model.Description)</p>
+                <div class="d-flex">
+                    <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-Id="@Model.Id">
+                        <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                            <i class="bi-cart-fill me-1"></i>Thêm Vào Giỏ
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mb-4">
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Images)
+            </dt>
+            <dd class="col-sm-10">
+                @if (Images != null)
+                {
+                    foreach (var item in Images)
+                    {
+                        <img src="@item.Url" width="200px">
+                    }
+                }
+            </dd>
+        </dl>
+    </div>
+</section>

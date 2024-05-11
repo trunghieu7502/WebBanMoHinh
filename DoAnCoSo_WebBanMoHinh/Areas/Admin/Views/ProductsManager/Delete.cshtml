@@ -1,0 +1,66 @@
+﻿@model DoAnCoSo_WebBanMoHinh.Models.Product
+
+@{
+    ViewData["Title"] = "Xóa Sản Phẩm";
+}
+
+<h1>Xóa sản phẩm</h1>
+
+<h3>Bạn thực sự có muốn xóa sản phẩm này không?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ImageUrl)
+        </dt>
+        <dd class = "col-sm-10">
+            <img src="@Model.ImageUrl" class="card-img-top" alt="...">
+        </dd>
+        <dt class = "col-sm-2">
+            Hãng
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Company.CompName)
+        </dd>
+        <dt class = "col-sm-2">
+            Loại
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Category.CateName)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Xóa" class="btn btn-danger" />
+        <a asp-area="Admin" asp-controller="ProductsManager" asp-action="Index">
+            <button class="btn btn-outline-dark flex-shrink-0 ms-2" type="button">
+                Trở Về
+            </button>
+        </a>
+    </form>
+</div>

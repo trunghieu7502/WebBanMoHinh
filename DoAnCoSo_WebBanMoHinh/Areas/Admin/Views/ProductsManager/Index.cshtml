@@ -1,0 +1,73 @@
+﻿@model IEnumerable<DoAnCoSo_WebBanMoHinh.Models.Product>
+
+@{
+    ViewData["Title"] = "Sản Phẩm";
+}
+
+<h1 class="text-center mt-4">DANH SÁCH SẢN PHẨM</h1>
+
+<p>
+    <a asp-area="Admin" asp-controller="ProductsManager" asp-action="Create">
+        <button class="btn btn-primary">Thêm Sản Phẩm Mới</button>
+    </a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageUrl)
+            </th>
+            <th>
+                Hãng
+            </th>
+            <th>
+                Loại
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                <p>@item.Price.ToString("#,##0") VNĐ</p>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                    <img src="@item.ImageUrl" class="card-img-top" alt="..." style="height: 100px">
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Company.CompName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.CateName)
+            </td>
+            <td>
+                    <a asp-area="Admin" asp-controller="ProductsManager" asp-action="Edit" asp-route-id="@item.Id">
+                        <button class="btn btn-warning">Sửa</button>
+                    </a>
+                    <a asp-area="Admin" asp-controller="ProductsManager" asp-action="Details" asp-route-id="@item.Id">
+                        <button class="btn btn-primary">Chi Tiết</button>
+                    </a>
+                    <a asp-area="Admin" asp-controller="ProductsManager" asp-action="Delete" asp-route-id="@item.Id">
+                        <button class="btn btn-danger">Xóa</button>
+                    </a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

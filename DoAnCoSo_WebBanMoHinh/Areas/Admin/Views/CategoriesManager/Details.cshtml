@@ -1,0 +1,97 @@
+﻿@model DoAnCoSo_WebBanMoHinh.Models.Category
+
+@{
+    string pname = Model.CateName;
+    ViewData["Title"] = $"{pname} - Admin";
+}
+
+<div>
+    <h4 class="mt-4">CHI TIẾT - @Html.DisplayFor(model => model.CateName)</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CateName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CateName)
+        </dd>
+    </dl>
+</div>
+<div class="d-flex">
+    <a asp-action="Edit" asp-route-id="@Model.Id">
+        <button class="btn btn-warning me-2">Sửa</button>
+    </a>
+    <a asp-area="Admin" asp-controller="CategoriesManager" asp-action="Index">
+        <button class="btn btn-outline-dark flex-shrink-0" type="button">
+            Trở Về
+        </button>
+    </a>
+</div>
+<br />
+
+<h4 class="mt-4">DANH SÁCH SẢN PHẨM - @Html.DisplayFor(model => model.CateName)</h4>
+<hr />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Tên
+            </th>
+            <th>
+                Giá
+            </th>
+            <th>
+                Trạng Thái
+            </th>
+            <th>
+                Ảnh Đại Diện
+            </th>
+            <th>
+                Hãng
+            </th>
+            <th>
+                Loại
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Products)
+        {
+            if (item.CategoryId == Model.Id)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        <p>@item.Price.ToString("#,##0") VNĐ</p>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        <img src="@item.ImageUrl" class="card-img-top" alt="..." style="height: 100px">
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Company.CompName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Category.CateName)
+                    </td>
+                    <td>
+                        <a asp-area="Admin" asp-controller="ProductsManager" asp-action="Edit" asp-route-id="@item.Id">
+                            <button class="btn btn-warning">Sửa</button>
+                        </a>
+                        <a asp-area="Admin" asp-controller="ProductsManager" asp-action="Details" asp-route-id="@item.Id">
+                            <button class="btn btn-primary">Chi Tiết</button>
+                        </a>
+                        <a asp-area="Admin" asp-controller="ProductsManager" asp-action="Delete" asp-route-id="@item.Id">
+                            <button class="btn btn-danger">Xóa</button>
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DoAnCoSo_WebBanMoHinh</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/DoAnCoSo_WebBanMoHinh.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <div class="p-3 text-center bg-white border-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 d-flex justify-content-center justify-content-md-start mb-3 mb-md-0">
+                        <a class="navbar-brand" asp-area="" asp-controller="Products" asp-action="Index">
+                            <img src="~/images/Beyblade_X_Logo.png" alt="BeybladeX" height="35">
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        @using (Html.BeginForm("SearchProducts", "Products", FormMethod.Get))
+                        {
+                            <div class="input-group">
+                                <input type="search" name="query" class="form-control ms-2" placeholder="Tìm Kiếm" aria-label="Search" aria-describedby="search-addon" />
+                                <button class="btn btn-outline-dark" type="submit"> <i class="bi-search"></i> </button>
+                            </div>
+                        }
+                    </div>
+                    <div class="col-md-4 d-flex justify-content-center justify-content-md-end align-items-center">
+                        <div class="d-flex">
+                            <partial name="_LoginPartial" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow p-3 mb-5 rounded">
+            <div class="container justify-content-center justify-content-md-between">
+                <ul class="navbar-nav flex-row">
+                    <li class="nav-item me-2 me-lg-0 d-none d-md-inline-block">
+                        <a class="nav-link" asp-area="" asp-controller="Products" asp-action="ProductList">Sản Phẩm</a>
+                    </li>
+                    <li class="nav-item me-2 me-lg-0 d-none d-md-inline-block">
+                        <a class="nav-link" href="#">Liên Hệ</a>
+                    </li>
+                </ul>
+                
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - DoAnCoSo_WebBanMoHinh - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

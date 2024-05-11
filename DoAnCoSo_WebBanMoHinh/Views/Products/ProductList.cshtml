@@ -1,0 +1,66 @@
+﻿@model PaginatedList<DoAnCoSo_WebBanMoHinh.Models.Product>
+
+
+@{
+    ViewData["Title"] = "Sản Phẩm";
+}
+
+<section class="py-2">
+    <h1 class="text-center">DANH SÁCH SẢN PHẨM</h1>
+    <div class="container px-lg-5 mt-4">
+        <div class="row gx-4 gx-lg-2 row-cols-xl-4 justify-content-center">
+            @foreach (var item in Model)
+            {
+                <div class="col mb-5">
+                    <div class="card" style="width: 17rem">
+                        <a asp-action="Details" asp-route-id="@item.Id">
+                            <img src="@item.ImageUrl" class="card-img-top" alt="..." style="height: 250px" a asp-action="Details" asp-route-id="@item.Id">
+                        </a>
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                @Html.DisplayFor(modelItem => item.Company.CompName)
+                            </h4>
+                            <h6 class="card-title">
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </h6>
+                            <div class="d-flex">
+                                <span>Giá: </span>
+                                <p class="mx-3">@item.Price.ToString("#,##0") VNĐ</p>
+                            </div>
+                            <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-Id="@item.Id">
+                                <button class="btn btn-outline-dark">
+                                    <i class="bi-cart-fill me-1"></i> Thêm Vào Giỏ
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+<div class="d-flex justify-content-between">
+    <a asp-action="ProductList" asp-route-pageNumber="@(Model.PageIndex - 1)" class="@prevDisabled btn btn-outline-dark btn-direction">
+        <i class="bi-arrow-left me-1"></i>Trước
+    </a>
+    <div>
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                @for (int i = 1; i <= @Model.TotalPages; i++)
+                {
+                    <li class="page-item @(i == @Model.PageIndex ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("ProductList", new { pageNumber = i })">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+    <a asp-action="ProductList" asp-route-pageNumber="@(Model.PageIndex + 1)" class="@nextDisabled btn btn-outline-dark btn-direction">
+        Sau<i class="bi-arrow-right ms-1"></i>
+    </a>
+</div>

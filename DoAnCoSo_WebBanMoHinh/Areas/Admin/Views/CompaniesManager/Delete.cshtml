@@ -1,0 +1,28 @@
+﻿@model DoAnCoSo_WebBanMoHinh.Models.Company
+
+@{
+    ViewData["Title"] = "Xóa Hãng";
+}
+
+<h3 class="mt-4">Bạn có thực sự muốn xóa hãng này?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CompName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CompName)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Xóa" class="btn btn-danger me-2" />
+        <a asp-area="Admin" asp-controller="CompaniesManager" asp-action="Index">
+            <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                Trở Về
+            </button>
+        </a>
+    </form>
+</div>

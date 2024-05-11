@@ -1,0 +1,28 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<div class="dropdown">
+    <button class="btn btn-secondary" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-person-circle"></i>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <li><a id="manage" class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a></li>
+            if (User.IsInRole(WebRoles.Role_Admin))
+            {
+                <li>
+                    <a id="manage" class="dropdown-item" asp-area="Admin" asp-controller="ProductsManager" asp-action="Index" title="Manage">Quản Lý Admin</a>
+                </li>
+            }
+            <li><a id="logoutForm" class="dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">Đăng Xuất</a></li>
+        }
+        else
+        {
+            <li><a class="dropdown-item" id="login" asp-area="Identity" asp-page="/Account/Login">Đăng Nhập</a></li>
+            <li><a class="dropdown-item" id="register" asp-area="Identity" asp-page="/Account/Register">Đăng Ký</a></li>
+        }
+    </ul>
+</div>

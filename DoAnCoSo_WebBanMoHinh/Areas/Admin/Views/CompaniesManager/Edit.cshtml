@@ -1,0 +1,29 @@
+﻿@model DoAnCoSo_WebBanMoHinh.Models.Company
+
+@{
+    ViewData["Title"] = "Sửa Hãng";
+}
+
+<h4 class="mt-4">SỬA THÔNG TIN</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="CompName" class="control-label"></label>
+                <input asp-for="CompName" class="form-control" />
+                <span asp-validation-for="CompName" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-2">
+                <input type="submit" value="Lưu" class="btn btn-primary me-2" />
+                <a asp-area="Admin" asp-controller="CompaniesManager" asp-action="Index">
+                    <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                        Trở Về
+                    </button>
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
