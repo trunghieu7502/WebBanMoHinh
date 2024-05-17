@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
+    int quantity = 1;
 }
 
 <section class="py-2">
@@ -26,7 +27,7 @@
                                     <span>Giá: </span>
                                     <p class="mx-3">@item.Price.ToString("#,##0") VNĐ</p>
                                 </div>
-                                <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-Id="@item.Id">
+                                <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-Id="@item.Id" asp-route-quantity="@quantity">
                                     <button class="btn btn-outline-dark">
                                         <i class="bi-cart-fill me-1"></i> Thêm Vào Giỏ
                                     </button>
