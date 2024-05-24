@@ -12,7 +12,7 @@
 </head>
 <body>
     <header>
-        <div class="text-center bg-white border-bottom">
+        <div class="text-center border-bottom" style="background:#363636">
             <div class="container">
                 <div class="row">
                     <div class="col-md-4 d-flex justify-content-center justify-content-md-start">
@@ -25,13 +25,13 @@
                         {
                             <div class="input-group pt-4">
                                 <input type="search" name="query" class="form-control" placeholder="Tìm Kiếm" aria-label="Search" aria-describedby="search-addon" />
-                                <button class="btn btn-outline-dark" type="submit"> <i class="bi-search"></i> </button>
+                                <button class="btn btn-outline-light" type="submit"> <i class="bi-search"></i> </button>
                             </div>
                         }
                     </div>
                     <div class="col-md-4 d-flex justify-content-center justify-content-md-end align-items-center">
                         <form class="d-flex me-2">
-                            <button class="btn btn-outline-dark" type="submit" asp-controller="ShoppingCart" asp-action="Index">
+                            <button class="btn btn-outline-light" type="submit" asp-controller="ShoppingCart" asp-action="Index">
                                 <i class="bi-cart-fill me-1"> Giỏ Hàng</i>
                             </button>
                         </form>
@@ -46,24 +46,41 @@
             <div class="container justify-content-center justify-content-md-between">
                 <ul class="navbar-nav flex-row">
                     <li class="nav-item me-2 me-lg-0 d-none d-md-inline-block">
-                        <a class="nav-link" asp-area="" asp-controller="Products" asp-action="ProductList">Sản Phẩm</a>
+                        <a class="nav-link" href="/">
+                            <i class="bi bi-house"></i>
+                            <span class="nav-text">Trang Chủ</span>
+                        </a>
                     </li>
                     <li class="nav-item me-2 me-lg-0 d-none d-md-inline-block">
-                        <a class="nav-link" href="#">Liên Hệ</a>
+                        <a class="nav-link" href="/products/ProductList">
+                            <i class="bi bi-box"></i>
+                            <span class="nav-text">Sản Phẩm</span>
+                        </a>
+                    </li>
+                    <li class="nav-item me-2 me-lg-0 d-none d-md-inline-block">
+                        <a class="nav-link" href="/about">
+                            <i class="bi bi-info-circle"></i>
+                            <span class="nav-text">Giới Thiệu</span>
+                        </a>
+                    </li>                    
+                    <li class="nav-item me-2 me-lg-0 d-none d-md-inline-block">
+                        <a class="nav-link" href="#footer">
+                            <i class="bi bi-envelope"></i>
+                            <span class="nav-text">Liên Hệ</span>
+                        </a>
                     </li>
                 </ul>
-                
             </div>
         </nav>
     </header>
 
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-5">
             @RenderBody()
         </main>
     </div>
 
-	<footer class="mg-0 pd-bt-50-mb">
+	<footer class="mg-0 pd-bt-50-mb mt-5" id="footer">
 		<div class="top-ft-wanda">
 			<div class="container">
 				<div class="d-flex row mt-2 pt-4">

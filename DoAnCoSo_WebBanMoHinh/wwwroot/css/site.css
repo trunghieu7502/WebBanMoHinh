@@ -16,7 +16,44 @@ html {
   position: relative;
   min-height: 100%;
 }
-    
+
+#about-btn {
+    background-color: #b3ff51;
+    border-color: #b3ff51;
+    text-shadow: 1px 1px 0 #444;
+}
+
+.c-item {
+    height: 480px;
+}
+
+.c-img {
+    height: 100%;
+    filter: brightness(0.6);
+}
+
+.navbar-nav {
+    width: 960px; /* Đặt chiều dài cho thanh điều hướng là 960px */
+}
+
+    /* Đặt khoảng cách giữa các nút */
+    .navbar-nav .nav-item {
+        margin-right: 20px; /* Khoảng cách giữa các nút là 20px */
+    }
+
+        /* Hiệu ứng gạch chân khi trỏ chuột vào */
+        .navbar-nav .nav-item .nav-link:hover {
+            text-decoration: underline; /* Gạch chân */
+        }
+/* Điều chỉnh kích thước icon */
+.nav-link i {
+    font-size: 24px; /* Kích thước icon */
+}
+
+/* Điều chỉnh kích thước chữ */
+.nav-link .nav-text {
+    font-size: 18px; /* Kích thước chữ */
+}
 
 /* Đặt nền màu đen cho toàn bộ footer */
 footer {
