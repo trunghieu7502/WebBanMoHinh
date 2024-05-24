@@ -16,7 +16,66 @@ html {
   position: relative;
   min-height: 100%;
 }
+    
 
-body {
-  margin-bottom: 60px;
+/* Đặt nền màu đen cho toàn bộ footer */
+footer {
+    background-color: #333333;
+    color: #fff; /* Chữ màu trắng */
 }
+
+    /* Đặt chữ màu trắng cho các đoạn văn */
+    footer p,
+    footer ul li {
+        color: #fff;
+    }
+
+    /* Đặt màu xanh dương cho số điện thoại */
+    footer a[href^="tel"] {
+        color: #00f; /* Số màu xanh dương */
+    }
+
+    /* Đặt màu trắng cho các liên kết khác */
+    footer a {
+        color: #fff;
+        text-decoration: none;
+    }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+    /* Đặt màu trắng cho các tiêu đề trong footer */
+    footer .title-footer .h4 {
+        color: #fff;
+    }
+
+    /* Đặt màu trắng cho các liên kết trong danh sách */
+    footer .footer-link-wanda ul li a {
+        color: #fff;
+    }
+
+    /* Đặt màu xanh dương cho các số điện thoại trong phần hỗ trợ */
+    footer .footer-support li a {
+        color: #00f; /* Số màu xanh dương */
+    }
+
+    /* Đặt màu trắng cho các nhãn trong phần hỗ trợ */
+    footer .footer-support li span {
+        color: #fff;
+    }
+
+    /* Đặt màu trắng cho văn bản bản quyền */
+    footer .text-copyright span {
+        color: #fff;
+    }
+
+    /* Đặt màu xanh dương cho liên kết trong văn bản bản quyền */
+    footer .text-copyright a {
+        color: #00f; /* Số màu xanh dương */
+    }
+    /* Đặt màu nền khác cho phần copyright-wanda */
+    footer .copyright-wanda {
+        background-color: #000000; /* Thay đổi màu nền ở đây */
+        color: #fff; /* Đặt chữ màu trắng nếu cần */
+    }
