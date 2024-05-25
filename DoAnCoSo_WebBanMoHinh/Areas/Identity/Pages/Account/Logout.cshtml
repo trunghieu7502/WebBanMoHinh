@@ -1,21 +1,27 @@
 ﻿@page
 @model LogoutModel
 @{
-    ViewData["Title"] = "Log out";
+    ViewData["Title"] = "Đăng Xuất";
 }
 
-<header>
-    <h1>@ViewData["Title"]</h1>
+<div class="container">
+    <h1 class="text-center">@ViewData["Title"]</h1>
+    <h2 class="text-center">Bạn có muốn đăng xuất không?</h2>
     @{
         if (User.Identity?.IsAuthenticated ?? false)
         {
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-                <button type="submit" class="nav-link btn btn-link text-dark">Click here to Logout</button>
-            </form>
+            <div class="d-flex justify-content-center align-items-center">
+                <a class="me-2" asp-area="" asp-controller="Products" asp-action="Index">
+                    <button class="btn btn-outline-dark">Trở Về</button>
+                </a>
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                    <button type="submit" class="btn btn-success">Đăng Xuất</button>
+                </form>
+            </div>
         }
         else
         {
-            <p>You have successfully logged out of the application.</p>
+            <p>Bạn đã đăng xuất thành công.</p>
         }
     }
-</header>
+</div>

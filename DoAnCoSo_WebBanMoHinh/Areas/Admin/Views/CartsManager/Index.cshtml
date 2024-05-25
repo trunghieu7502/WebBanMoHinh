@@ -1,0 +1,65 @@
+﻿@model IEnumerable<DoAnCoSo_WebBanMoHinh.Models.Order>
+
+@{
+    ViewData["Title"] = "Đơn Hàng";
+}
+
+<h1 class="text-center mt-4">DANH SÁCH ĐƠN HÀNG</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Ngày Đặt
+            </th>
+            <th>
+                Khách Hàng
+            </th>
+            <th>
+                Tổng Giá
+            </th>
+            <th>
+                Địa Chỉ
+            </th>
+            <th>
+                Ghi Chú
+            </th>
+            <th>
+                Trạng Thái
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @item.TotalPrice.ToString("#,##0") VNĐ
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShippingAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Notes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsDone)
+            </td>
+            <td>
+                    <a asp-area="Admin" asp-controller="CartsManager" asp-action="Details" asp-route-id="@item.Id">
+                        <button class="btn btn-primary">Chi Tiết</button>
+                    </a>
+                    <a asp-area="Admin" asp-controller="CartsManager" asp-action="Edit" asp-route-id="@item.Id">
+                        <button class="btn btn-warning">Sửa</button>
+                    </a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

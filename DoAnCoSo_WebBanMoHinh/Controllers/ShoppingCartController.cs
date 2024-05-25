@@ -93,8 +93,10 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             }
             var user = await _userManager.GetUserAsync(User);
             order.UserId = user.Id;
+            order.UserName = user.UserName;
             order.OrderDate = DateTime.UtcNow;
             order.TotalPrice = cart.Items.Sum(i => i.Price * i.Quantity);
+            order.IsDone = false;
             order.OrderDetails = cart.Items.Select(i => new OrderDetail
             {
                 ProductId = i.Id,
