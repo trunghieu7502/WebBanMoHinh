@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace DoAnCoSo_WebBanMoHinh.Areas.Admin.Controllers
@@ -58,7 +59,8 @@ namespace DoAnCoSo_WebBanMoHinh.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
+            var users = await _context.Users.ToListAsync();
+            ViewBag.UserId = new SelectList(users, "Id", "UserName", order.UserId);
             return View(order);
         }
 
