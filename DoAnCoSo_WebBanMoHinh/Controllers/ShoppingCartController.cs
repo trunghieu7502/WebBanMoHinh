@@ -77,36 +77,56 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             }
             return RedirectToAction("Index");
         }
-        public IActionResult Checkout()
+        public async Task<IActionResult> Checkout()
         {
-            return View(new Order());
+            var user = await _userManager.GetUserAsync(User);
+            var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new ShoppingCart();
+            if (cart.Items.Count == 0)
+            {
+                return RedirectToAction("Index", "Products");
+            }
+            var model = new CheckoutVM
+            {
+                User = user,
+                Cart = cart
+            };
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Checkout(Order order)
+        public async Task<IActionResult> Checkout(CheckoutVM model)
         {
             var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
             if (cart == null || !cart.Items.Any())
             {
-                // Xử lý giỏ hàng trống...
                 return RedirectToAction("Index");
             }
             var user = await _userManager.GetUserAsync(User);
-            order.UserId = user.Id;
-            order.UserName = user.UserName;
-            order.OrderDate = DateTime.UtcNow;
-            order.TotalPrice = cart.Items.Sum(i => i.Price * i.Quantity);
-            order.IsDone = false;
-            order.OrderDetails = cart.Items.Select(i => new OrderDetail
+            var order = new Order
             {
-                ProductId = i.Id,
-                Quantity = i.Quantity,
-                Price = i.Price
-            }).ToList();
+                UserId = user.Id,
+                UserName = user.UserName,
+                OrderDate = DateTime.UtcNow,
+                TotalPrice = cart.Items.Sum(i => i.Price * i.Quantity),
+                IsDone = false,
+                ShippingAddress = model.Address,
+                City = model.City,
+                District = model.District,
+                Ward = model.Ward,
+                DeliveryMethod = model.DeliveryMethod,
+                PaymentMethod = model.PaymentMethod,
+                OrderDetails = cart.Items.Select(i => new OrderDetail
+                {
+                    ProductId = i.Id,
+                    Quantity = i.Quantity,
+                    Price = i.Price
+                }).ToList()
+            };
+
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
-            HttpContext.Session.Remove("Cart");
-            return View("OrderCompleted", order.Id); // Trang xác nhận hoàn thành đơn hàng
+            HttpContext.Session.Remove("Cart"); // Xóa giỏ hàng khỏi session
+            return View("OrderCompleted", order); // Trang xác nhận hoàn thành đơn hàng
         }
     }
 }

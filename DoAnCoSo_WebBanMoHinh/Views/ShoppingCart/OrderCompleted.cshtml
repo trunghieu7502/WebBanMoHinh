@@ -1,8 +1,8 @@
 ﻿@model int
-
 @{
-    ViewData["Title"] = "Thanh Toán Thành CÔng";
+    ViewData["Title"] = "Thanh Toán Thành Công";
 }
 
 <h2>Order Completed</h2>
-<p>Your order with ID @Model has been placed successfully.</p>
+<p>Your order has been successfully placed. Your order ID is @Model.</p>
+<a href="@Url.Action("Index", "Products")" class="btn btn-primary">Continue Shopping</a>
