@@ -114,6 +114,7 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
                 District = model.District,
                 Ward = model.Ward,
                 PaymentMethod = model.PaymentMethod,
+                Notes = model.Notes,
                 OrderDetails = cart.Items.Select(i => new OrderDetail
                 {
                     ProductId = i.Id,

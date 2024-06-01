@@ -8,6 +8,6 @@ public class CheckoutVM
     public string City { get; set; }
     public string District { get; set; }
     public string Ward { get; set; }
-    public string DeliveryMethod { get; set; }
     public string PaymentMethod { get; set; }
+    public string Notes { get; set; }
 }

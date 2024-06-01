@@ -1,8 +1,38 @@
-﻿@model int
+﻿@model Order
 @{
-    ViewData["Title"] = "Thanh Toán Thành Công";
+    ViewData["Title"] = "Đơn hàng hoàn tất";
 }
 
-<h2>Order Completed</h2>
-<p>Your order has been successfully placed. Your order ID is @Model.</p>
-<a href="@Url.Action("Index", "Products")" class="btn btn-primary">Continue Shopping</a>
+<h2>Đơn hàng của bạn đã được hoàn tất!</h2>
+<p>Cảm ơn bạn đã mua hàng tại cửa hàng chúng tôi. Dưới đây là thông tin chi tiết về đơn hàng của bạn:</p>
+
+<p><strong>Mã đơn hàng:</strong> @Model.Id</p>
+<p><strong>Ngày đặt hàng:</strong> @Model.OrderDate.ToString("dd/MM/yyyy")</p>
+<p><strong>Địa chỉ giao hàng:</strong> @Model.ShippingAddress, @Model.Ward, @Model.District, @Model.City</p>
+<p><strong>Phương thức thanh toán:</strong> @Model.PaymentMethod</p>
+<p><strong>Tổng giá trị:</strong> @String.Format("{0:0,0}", @Model.TotalPrice) VNĐ</p>
+<a href="@Url.Action("Index", "Products")" class="btn btn-primary">Trờ Về</a>
+
+@* <h3>Chi tiết đơn hàng</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tên sản phẩm</th>
+            <th>Số lượng</th>
+            <th>Giá</th>
+            <th>Tổng giá</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderDetails)
+        {
+            <tr>
+                <td>@item.Product.Name</td>
+                <td>@item.Quantity</td>
+                <td>@String.Format("{0:0,0}", item.Price) VNĐ</td>
+                <td>@String.Format("{0:0,0}", item.Quantity * item.Price) VNĐ</td>
+            </tr>
+        }
+    </tbody>
+</table>
+ *@
