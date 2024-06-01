@@ -113,7 +113,6 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
                 City = model.City,
                 District = model.District,
                 Ward = model.Ward,
-                DeliveryMethod = model.DeliveryMethod,
                 PaymentMethod = model.PaymentMethod,
                 OrderDetails = cart.Items.Select(i => new OrderDetail
                 {

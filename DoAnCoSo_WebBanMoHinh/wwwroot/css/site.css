@@ -33,86 +33,79 @@ html {
 }
 
 .navbar-nav {
-    width: 960px; /* Đặt chiều dài cho thanh điều hướng là 960px */
+    width: 960px;
 }
 
-    /* Đặt khoảng cách giữa các nút */
     .navbar-nav .nav-item {
-        margin-right: 20px; /* Khoảng cách giữa các nút là 20px */
+        margin-right: 20px;
     }
 
-        /* Hiệu ứng gạch chân khi trỏ chuột vào */
         .navbar-nav .nav-item .nav-link:hover {
-            text-decoration: underline; /* Gạch chân */
-        }
-/* Điều chỉnh kích thước icon */
-.nav-link i {
-    font-size: 24px; /* Kích thước icon */
-}
-
-/* Điều chỉnh kích thước chữ */
-.nav-link .nav-text {
-    font-size: 18px; /* Kích thước chữ */
-}
-
-/* Đặt nền màu đen cho toàn bộ footer */
-footer {
-    background-color: #333333;
-    color: #fff; /* Chữ màu trắng */
-}
-
-    /* Đặt chữ màu trắng cho các đoạn văn */
-    footer p,
-    footer ul li {
-        color: #fff;
-    }
-
-    /* Đặt màu xanh dương cho số điện thoại */
-    footer a[href^="tel"] {
-        color: #00f; /* Số màu xanh dương */
-    }
-
-    /* Đặt màu trắng cho các liên kết khác */
-    footer a {
-        color: #fff;
-        text-decoration: none;
-    }
-
-        footer a:hover {
             text-decoration: underline;
         }
 
-    /* Đặt màu trắng cho các tiêu đề trong footer */
-    footer .title-footer .h4 {
-        color: #fff;
-    }
+.nav-link i {
+    font-size: 24px;
+}
 
-    /* Đặt màu trắng cho các liên kết trong danh sách */
-    footer .footer-link-wanda ul li a {
-        color: #fff;
-    }
+.nav-link .nav-text {
+    font-size: 18px;
+}
 
-    /* Đặt màu xanh dương cho các số điện thoại trong phần hỗ trợ */
-    footer .footer-support li a {
-        color: #00f; /* Số màu xanh dương */
-    }
+#ProductCarousel img {
+    width: 50%;
+    margin: auto;
+}
 
-    /* Đặt màu trắng cho các nhãn trong phần hỗ trợ */
-    footer .footer-support li span {
-        color: #fff;
-    }
+footer {
+    background-color: #333333;
+    color: #fff;
+}
 
-    /* Đặt màu trắng cho văn bản bản quyền */
-    footer .text-copyright span {
-        color: #fff;
-    }
+footer p,
+footer ul li {
+    color: #fff;
+}
 
-    /* Đặt màu xanh dương cho liên kết trong văn bản bản quyền */
-    footer .text-copyright a {
-        color: #00f; /* Số màu xanh dương */
-    }
-    /* Đặt màu nền khác cho phần copyright-wanda */
-    footer .copyright-wanda {
-        background-color: #000000; /* Thay đổi màu nền ở đây */
-        color: #fff; /* Đặt chữ màu trắng nếu cần */
+
+footer a[href^="tel"] {
+    color: #00f;
+}
+
+footer a {
+    color: #fff;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+footer .title-footer .h4 {
+    color: #fff;
+}
+
+footer .footer-link-wanda ul li a {
+    color: #fff;
+}
+
+footer .footer-support li a {
+    color: #00f;
+}
+
+footer .footer-support li span {
+    color: #fff;
+}
+
+footer .text-copyright span {
+    color: #fff;
+}
+
+footer .text-copyright a {
+    color: #00f;
+}
+
+footer .copyright-wanda {
+    background-color: #000000;
+    color: #fff;
     }

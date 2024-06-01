@@ -22,6 +22,18 @@
                 Địa Chỉ
             </th>
             <th>
+                Thành Phố
+            </th>
+            <th>
+                Quận / Huyện
+            </th>
+            <th>
+                Xã
+            </th>
+            <th>
+                Phương Thức Thanh Toán
+            </th> 
+            <th>
                 Ghi Chú
             </th>
             <th>
@@ -44,6 +56,18 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ShippingAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.District)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ward)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentMethod)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Notes)

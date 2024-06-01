@@ -6,18 +6,46 @@
     var Images = ViewBag.Images;
 }
 
-<h1 class="mt-4">CHI TIẾT SẢN PHẨM</h1>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Trang Chủ</a></li>
+        <li class="breadcrumb-item"><a href="/products/ProductList">Sản Phẩm</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@Html.DisplayFor(model => model.Name)</li>
+    </ol>
+</nav>
 
-<section class="py-1">
-    <div class="container px-4 px-lg-5 my-5">
+<section>
+    <div class="container">
         <div class="row gx-4 gx-lg-5 align-items-center">
-            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="@Model.ImageUrl" alt="..." /></div>
+            <div class="col-md-6">
+                <div id="ProductCarousel" class="carousel carousel-dark slide mb-5">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active c-item">
+                            <img src="@Model.ImageUrl" class="d-block c-img" alt="Image Active">
+                        </div>
+                        @foreach (var item in Images)
+                        {
+                            <div class="carousel-item c-item">
+                                <img src="@item.Url" class="d-block c-img" alt="Image">
+                            </div>
+                        }
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#ProductCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#ProductCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
             <div class="col-md-6">
                 <h1 class="display-6 fw-bolder">@Html.DisplayFor(model => model.Name)</h1>
                 <div class="fs-5 mb-5">
-                    <span>@Model.Price.ToString("#,##0") VNĐ</span>
-                    <span class="ms-4">Loại sản phẩm: @Html.DisplayFor(model => model.Category.CateName)</span>
-                    <span class="ms-4">Hãng: @Html.DisplayFor(model => model.Company.CompName)</span>
+                    <span>Giá: @Model.Price.ToString("#,##0") VNĐ</span> <br />
+                    <span>Loại sản phẩm: @Html.DisplayFor(model => model.Category.CateName)</span> <br />
+                    <span>Hãng: @Html.DisplayFor(model => model.Company.CompName)</span>
                 </div>
                 <p class="lead">@Html.DisplayFor(model => model.Description)</p>
                 <div class="d-flex">
@@ -29,21 +57,5 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="mb-4">
-        <dl class="row">
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Images)
-            </dt>
-            <dd class="col-sm-10">
-                @if (Images != null)
-                {
-                    foreach (var item in Images)
-                    {
-                        <img src="@item.Url" width="200px">
-                    }
-                }
-            </dd>
-        </dl>
     </div>
 </section>
