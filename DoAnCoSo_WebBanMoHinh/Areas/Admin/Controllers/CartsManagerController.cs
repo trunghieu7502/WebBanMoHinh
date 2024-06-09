@@ -28,7 +28,7 @@ namespace DoAnCoSo_WebBanMoHinh.Areas.Admin.Controllers
         }
 
         // GET: CartsManagerController/Details/5
-        public async Task<ActionResult> DetailsAsync(int id)
+        public async Task<ActionResult> Details(int id)
         {
             if (id == null || _context.Orders == null)
             {

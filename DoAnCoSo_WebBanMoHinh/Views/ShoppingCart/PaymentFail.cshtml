@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Thanh toán thất bại";
+}
+<h2>Thanh toán không thành công</h2>
+<p class="error-message">Rất tiếc, thanh toán của bạn không thành công.</p>
+
+<div class="reasons">
+    <h3>Lý do:</h3>
+    <ul>
+        <li>Số dư tài khoản không đủ.</li>
+        <li>Thông tin thẻ không hợp lệ.</li>
+        <li>Lỗi hệ thống thanh toán.</li>
+    </ul>
+</div>
+
+<div class="actions">
+    <a asp-area="" asp-controller="ShoppingCart" asp-action="Index" class="btn btn-retry">Thử thanh toán lại</a>
+    <a href="#footer" class="btn btn-support">Liên hệ Hỗ trợ</a>
+</div>
+
+<p class="reassurance">Vui lòng yên tâm, thông tin thanh toán của bạn được bảo mật tuyệt đối.</p>

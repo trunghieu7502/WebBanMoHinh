@@ -1,5 +1,6 @@
 ﻿using DoAnCoSo_WebBanMoHinh.Extentions;
 using DoAnCoSo_WebBanMoHinh.Models;
+using DoAnCoSo_WebBanMoHinh.Models.Services;
 using DoAnCoSo_WebBanMoHinh.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -15,14 +16,16 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
         private readonly ICategoryRepository _categoryRepository;
         private readonly ICompanyRepository _companyRepository;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IVNPayService _vnPayService;
 
-        public ShoppingCartController(ApplicationDbContext context, IProductRepository productRepository, ICategoryRepository categoryRepository, ICompanyRepository companyRepository, UserManager<ApplicationUser> userManager)
+        public ShoppingCartController(ApplicationDbContext context, IProductRepository productRepository, ICategoryRepository categoryRepository, ICompanyRepository companyRepository, UserManager<ApplicationUser> userManager, IVNPayService vnPayService)
         {
             _context = context;
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
             _companyRepository = companyRepository;
             _userManager = userManager;
+            _vnPayService = vnPayService;
         }
         private async Task<Product> GetProductFromDatabase(int Id)
         {
@@ -94,39 +97,100 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Checkout(CheckoutVM model)
+        public async Task<IActionResult> Checkout(Order order, CheckoutVM model)
         {
-            var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
-            if (cart == null || !cart.Items.Any())
-            {
-                return RedirectToAction("Index");
-            }
             var user = await _userManager.GetUserAsync(User);
-            var order = new Order
+            var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
+            if(model.PaymentMethod == "VNPAY")
             {
-                UserId = user.Id,
-                UserName = user.UserName,
-                OrderDate = DateTime.UtcNow,
-                TotalPrice = cart.Items.Sum(i => i.Price * i.Quantity),
-                IsDone = false,
-                ShippingAddress = model.Address,
-                City = model.City,
-                District = model.District,
-                Ward = model.Ward,
-                PaymentMethod = model.PaymentMethod,
-                Notes = model.Notes,
-                OrderDetails = cart.Items.Select(i => new OrderDetail
+                var vnPayModel = new VNPayRequestModel
+                {
+                    Amount = (double)cart.Items.Sum(p => p.Price * p.Quantity),
+                    CreatedDate = DateTime.Now,
+                    Description = "Đơn hàng thành công",
+                    FullName = user.UserName,
+                    OrderId = new Random().Next(100, 1000)
+                };
+                if (cart == null || !cart.Items.Any())
+                {
+                    return RedirectToAction("Index");
+                }
+                order.UserId = user.Id;
+                order.UserName = user.UserName;
+                order.OrderDate = DateTime.UtcNow;
+                order.TotalPrice = cart.Items.Sum(i => i.Price * i.Quantity);
+                order.IsDone = false;
+                order.ShippingAddress = model.Address;
+                order.City = model.City;
+                order.District = model.District;
+                order.Ward = model.Ward;
+                order.PaymentMethod = model.PaymentMethod;
+                order.Notes = model.Notes;
+                order.OrderDetails = cart.Items.Select(i => new OrderDetail
                 {
                     ProductId = i.Id,
                     Quantity = i.Quantity,
                     Price = i.Price
-                }).ToList()
-            };
+                }).ToList();
+                _context.Orders.Add(order);
+                await _context.SaveChangesAsync();
+                HttpContext.Session.Remove("Cart");
+                return Redirect(_vnPayService.CreatePaymentUrl(HttpContext, vnPayModel));
+            }
+            if (cart == null || !cart.Items.Any())
+            {
+                return RedirectToAction("Index");
+            }
+            order.UserId = user.Id;
+            order.UserName = user.UserName;
+            order.OrderDate = DateTime.UtcNow;
+            order.TotalPrice = cart.Items.Sum(i => i.Price * i.Quantity);
+            order.IsDone = false;
+            order.ShippingAddress = model.Address;
+            order.City = model.City;
+            order.District = model.District;
+            order.Ward = model.Ward;
+            order.PaymentMethod = model.PaymentMethod;
+            order.Notes = model.Notes;
+            order.OrderDetails = cart.Items.Select(i => new OrderDetail
+            {
+                ProductId = i.Id,
+                Quantity = i.Quantity,
+                Price = i.Price
+            }).ToList();
 
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
             HttpContext.Session.Remove("Cart"); // Xóa giỏ hàng khỏi session
             return View("OrderCompleted", order); // Trang xác nhận hoàn thành đơn hàng
+        }
+
+        public IActionResult PaymentSuccess()
+        {
+            return View("OrderCompleted");
+        }
+
+        [Authorize]
+        public IActionResult PaymentFail()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult PaymentCallBack(Order order)
+        {
+            var response = _vnPayService.PaymentExecute(Request.Query);
+
+            if (response == null || response.VnPayResponseCode != "00")
+            {
+                TempData["Message"] = $"Lỗi thanh toán VN Pay: {response.VnPayResponseCode}";
+                return RedirectToAction("PaymentFail");
+            }
+
+
+            // Lưu đơn hàng vô database
+            TempData["Message"] = $"Thanh toán VNPay thành công";
+            return View("OrderCompleted");
         }
     }
 }

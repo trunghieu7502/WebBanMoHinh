@@ -1,4 +1,5 @@
 using DoAnCoSo_WebBanMoHinh.Models;
+using DoAnCoSo_WebBanMoHinh.Models.Services;
 using DoAnCoSo_WebBanMoHinh.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddScoped<IProductRepository, EFProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, EFCategoryRepository>();
 builder.Services.AddScoped<ICompanyRepository, EFCompanyRepository>();
+builder.Services.AddScoped<IVNPayService, VNPayService>();
 
 var app = builder.Build();
 
