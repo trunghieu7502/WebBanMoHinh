@@ -21,12 +21,12 @@ namespace DoAnCoSo_WebBanMoHinh.Models.Services
             vnpay.AddRequestData("vnp_TmnCode", _config["VnPay:TmnCode"]);
             vnpay.AddRequestData("vnp_Amount", ((int)model.Amount * 100).ToString()); 
             vnpay.AddRequestData("vnp_CreateDate", model.CreatedDate.ToString("yyyyMMddHHmmss"));
-            vnpay.AddRequestData("vnp_CurrCode", _config["VnPay:CurrentCode"]);
+            vnpay.AddRequestData("vnp_CurrCode", _config["VnPay:CurrCode"]);
             vnpay.AddRequestData("vnp_IpAddr", Utils.GetIpAddress(context));
             vnpay.AddRequestData("vnp_Locale", _config["VnPay:Locale"]);
-            vnpay.AddRequestData("vnp_OrderInfo", "Thanh toan don hang" + model.OrderId);
-            vnpay.AddRequestData("vnp_OrderType", "other"); //default value: other
-            vnpay.AddRequestData("vnp_ReturnUrl", _config["VnPay:PaymentBackReturnUrl"]);
+            vnpay.AddRequestData("vnp_OrderInfo", "Thanh toan don hang " + model.OrderId + " Don gia " + model.Amount);
+            vnpay.AddRequestData("vnp_OrderType", "190000");
+            vnpay.AddRequestData("vnp_ReturnUrl", _config["PaymentCallBack:ReturnUrl"]);
             vnpay.AddRequestData("vnp_TxnRef", tick);
 
             var paymentUrl = vnpay.CreateRequestUrl(_config["VnPay:BaseUrl"], _config["VnPay:HashSecret"]);

@@ -190,7 +190,7 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
 
             // Lưu đơn hàng vô database
             TempData["Message"] = $"Thanh toán VNPay thành công";
-            return View("OrderCompleted");
+            return View("OrderCompleted", order);
         }
     }
 }
