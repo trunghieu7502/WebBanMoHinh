@@ -5,6 +5,8 @@ using DoAnCoSo_WebBanMoHinh.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace DoAnCoSo_WebBanMoHinh.Controllers
 {
@@ -177,7 +179,7 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
         }
 
         [Authorize]
-        public IActionResult PaymentCallBack(Order order)
+        public IActionResult PaymentCallBack()
         {
             var response = _vnPayService.PaymentExecute(Request.Query);
 
@@ -186,10 +188,12 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
                 TempData["Message"] = $"Lỗi thanh toán VN Pay: {response.VnPayResponseCode}";
                 return RedirectToAction("PaymentFail");
             }
-
-
-            // Lưu đơn hàng vô database
+            
             TempData["Message"] = $"Thanh toán VNPay thành công";
+
+            //Biện pháp tạm thời, không thể áp dụng cho trường hợp 2 nguòi thanh toán cùng một lúc
+            Order order = _context.Orders.OrderBy(i => i.Id).LastOrDefault();
+
             return View("OrderCompleted", order);
         }
     }
