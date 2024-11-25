@@ -15,19 +15,22 @@
 }
 else
 {
-    <h2>GIỎ HÀNG CỦA BẠN</h2>
-    <div class="container py-5 h-100">
-        <div class="d-flex justify-content-center align-items-center h-100">
-            <div class="card text-white" style="border-radius: 1rem; background:#363636">
-                <div class="card-body p-5">
-                    <table style="border-collapse: separate; border-spacing:0 20px;">
+    <h2 class="text-center mb-4">GIỎ HÀNG CỦA BẠN</h2>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="p-5" style="background: #f8f9fa; border-radius: 1rem; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                <table class="table table-bordered">
+                    <thead class="table-light">
                         <tr>
-                            <th style="padding-right: 150px;">Tên Sản Phẩm</th>
-                            <th style="padding-right: 150px;">Ảnh</th>
-                            <th style="padding-right: 150px;">Số Lượng</th>
-                            <th style="padding-right: 60px;">Giá Sản Phẩm</th>
-                            <th style="padding-right: 60px;">Tổng Giá</th>
+                            <th scope="col">Tên Sản Phẩm</th>
+                            <th scope="col">Ảnh</th>
+                            <th scope="col">Số Lượng</th>
+                            <th scope="col">Giá Sản Phẩm</th>
+                            <th scope="col">Tổng Giá</th>
+                            <th scope="col">Hành Động</th>
                         </tr>
+                    </thead>
+                    <tbody>
                         @foreach (var item in Model.Items)
                         {
                             <tr>
@@ -36,35 +39,24 @@ else
                                     <img src="@item.ImageUrl" width="100px" height="100px" alt="@Html.DisplayFor(modelItem => item.Name)">
                                 </td>
                                 <td>
-                                    <input type="number" min="1" id="txtQuantity_@item.Id" name="txtQuantity" onchange="updateCart('@item.Id')" value="@item.Quantity" />
+                                    <input type="number" class="form-control" min="1" id="txtQuantity_@item.Id" name="txtQuantity" onchange="updateCart('@item.Id')" value="@item.Quantity" />
                                 </td>
+                                <td>@string.Format("{0:0,0}", item.Price) VNĐ</td>
+                                <td>@string.Format("{0:0,0}", item.Price * item.Quantity) VNĐ</td>
                                 <td>
-                                    <p>@string.Format("{0:0,0}", item.Price) VNĐ</p>
-                                </td>
-                                <td>
-                                    <p>@string.Format("{0:0,0}", item.Price * item.Quantity) VNĐ</p>
-                                </td>
-                                <td>
-                                    <a asp-action="RemoveFromCart" asp-route-Id="@item.Id">
-                                        <button class="btn btn-danger">Xóa</button>
-                                    </a>
+                                    <a asp-action="RemoveFromCart" asp-route-Id="@item.Id" class="btn btn-danger">Xóa</a>
                                 </td>
                             </tr>
                         }
-                    </table>
-                    <hr />
-                    <div class="container">
-                        <div class="d-flex bd-highlight">
-                            <a asp-action="Checkout" asp-route-Id="model.Id">
-                                <button class="btn btn-success me-4">Đặt Hàng</button>
-                            </a>
-                            <a asp-controller="Products" asp-action="Index">
-                                <button class="btn btn-primary">Trở Về</button>
-                            </a>
-                            <h4 class="flex-grow-1 bd-highlight text-end">Tổng cộng: @String.Format("{0:0,0}", Model.Items.Sum(i => i.Quantity * i.Price)) VNĐ</h4>
-                        </div>
-                        
+                    </tbody>
+                </table>
+                <hr />
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <a asp-action="Checkout" asp-route-Id="model.Id" class="btn btn-success me-3">Đặt Hàng</a>
+                        <a asp-controller="Products" asp-action="Index" class="btn btn-primary">Trở Về</a>
                     </div>
+                    <h4 class="mb-0">Tổng cộng: @String.Format("{0:0,0}", Model.Items.Sum(i => i.Quantity * i.Price)) VNĐ</h4>
                 </div>
             </div>
         </div>

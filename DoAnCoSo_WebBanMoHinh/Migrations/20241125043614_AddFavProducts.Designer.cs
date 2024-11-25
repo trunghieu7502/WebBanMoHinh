@@ -4,6 +4,7 @@ using DoAnCoSo_WebBanMoHinh.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DoAnCoSo_WebBanMoHinh.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241125043614_AddFavProducts")]
+    partial class AddFavProducts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,14 +144,17 @@ namespace DoAnCoSo_WebBanMoHinh.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
                     b.ToTable("FavoriteProducts");
                 });
@@ -437,14 +443,14 @@ namespace DoAnCoSo_WebBanMoHinh.Migrations
             modelBuilder.Entity("DoAnCoSo_WebBanMoHinh.Models.FavoriteProduct", b =>
                 {
                     b.HasOne("DoAnCoSo_WebBanMoHinh.Models.Product", "Product")
-                        .WithMany("FavoriteProducts")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DoAnCoSo_WebBanMoHinh.Models.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("Product");
 
@@ -579,8 +585,6 @@ namespace DoAnCoSo_WebBanMoHinh.Migrations
 
             modelBuilder.Entity("DoAnCoSo_WebBanMoHinh.Models.Product", b =>
                 {
-                    b.Navigation("FavoriteProducts");
-
                     b.Navigation("Images");
                 });
 #pragma warning restore 612, 618

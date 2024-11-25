@@ -7,45 +7,47 @@
 
 <section class="vh-100 gradient-custom">
     <form id="account" method="post">
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                <div class="card text-white" style="border-radius: 1rem; background:#363636">
-                    <div class="card-body p-5 text-center">
-                        <div class="mb-md-5 mt-md-4 pb-5">
-                            <h2 class="fw-bold mb-2 text-uppercase">Đăng Nhập</h2>
-                            <p class="text-white-50 mb-5">Mời bạn nhập email và mật khẩu</p>
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                    <div class="login-container">
+                        <h2 class="fw-bold mb-3 text-uppercase text-center">Đăng Nhập</h2>
+                        <p class="text-muted mb-4 text-center">Mời bạn nhập email và mật khẩu</p>
 
-                            <div class="form-outline form-white mb-4">
-                                <label asp-for="Input.Email" class="form-label">Email</label>
-                                <input asp-for="Input.Email" class="form-control form-control-lg" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                                <span asp-validation-for="Input.Email" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-outline form-white mb-4">
-                                <label asp-for="Input.Password" class="form-label">Mật Khẩu</label>
-                                <input asp-for="Input.Password" class="form-control form-control-lg" autocomplete="current-password" aria-required="true" placeholder="password" />
-                                <span asp-validation-for="Input.Password" class="text-danger"></span>
-                            </div>
-                            <p class="small mb-5 pb-lg-2"><a class="text-white-50" id="forgot-password" asp-page="./ForgotPassword">Quên mật khẩu?</a></p>
-                            <div class="checkbox mb-3">
-                                <label asp-for="Input.RememberMe" class="form-label">
-                                    <input class="form-check-input" asp-for="Input.RememberMe" />
-                                    Ghi Nhớ Đăng Nhập
-                                </label>
-                            </div>
-                            <button id="login-submit" type="submit" class="btn btn-outline-light btn-lg px-5">Đăng Nhập</button>
+                        <div class="form-outline mb-4">
+                            <label asp-for="Input.Email" class="form-label">Email</label>
+                            <input asp-for="Input.Email" class="form-control form-control-lg" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                            <span asp-validation-for="Input.Email" class="text-danger"></span>
                         </div>
-                        <div>
+
+                        <div class="form-outline mb-4">
+                            <label asp-for="Input.Password" class="form-label">Mật Khẩu</label>
+                            <input asp-for="Input.Password" class="form-control form-control-lg" autocomplete="current-password" aria-required="true" placeholder="password" />
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                        </div>
+
+                        <p class="small mb-5 text-end">
+                            <a class="text-muted" id="forgot-password" asp-page="./ForgotPassword">Quên mật khẩu?</a>
+                        </p>
+
+                        <div class="checkbox mb-3">
+                            <label asp-for="Input.RememberMe" class="form-label">
+                                <input class="form-check-input" asp-for="Input.RememberMe" />
+                                Ghi Nhớ Đăng Nhập
+                            </label>
+                        </div>
+
+                        <button id="login-submit" type="submit" class="btn btn-primary btn-lg w-100">Đăng Nhập</button>
+
+                        <div class="mt-4 text-center">
                             <p class="mb-0">
-                                Chưa có tài khoản? <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="text-white-50 fw-bold">Đăng Ký</a>
+                                Chưa có tài khoản? <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="text-primary fw-bold">Đăng Ký</a>
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </form>
 </section>
 

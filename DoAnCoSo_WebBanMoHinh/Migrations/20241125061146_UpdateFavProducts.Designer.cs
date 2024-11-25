@@ -4,6 +4,7 @@ using DoAnCoSo_WebBanMoHinh.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DoAnCoSo_WebBanMoHinh.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241125061146_UpdateFavProducts")]
+    partial class UpdateFavProducts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -437,7 +440,7 @@ namespace DoAnCoSo_WebBanMoHinh.Migrations
             modelBuilder.Entity("DoAnCoSo_WebBanMoHinh.Models.FavoriteProduct", b =>
                 {
                     b.HasOne("DoAnCoSo_WebBanMoHinh.Models.Product", "Product")
-                        .WithMany("FavoriteProducts")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -579,8 +582,6 @@ namespace DoAnCoSo_WebBanMoHinh.Migrations
 
             modelBuilder.Entity("DoAnCoSo_WebBanMoHinh.Models.Product", b =>
                 {
-                    b.Navigation("FavoriteProducts");
-
                     b.Navigation("Images");
                 });
 #pragma warning restore 612, 618

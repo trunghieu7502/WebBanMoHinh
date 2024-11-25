@@ -1,0 +1,44 @@
+﻿@model DoAnCoSo_WebBanMoHinh.Models.Category
+
+@{
+    string pname = Model.CateName;
+    ViewData["Title"] = $"{pname}";
+    int quantity = 1;
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Trang Chủ</a></li>
+        <li class="breadcrumb-item"><a href="/products/ProductList">Sản Phẩm</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@Html.DisplayFor(model => model.CateName)</li>
+    </ol>
+</nav>
+
+<section class="py-2">
+    <h1 class="text-center">DANH SÁCH SẢN PHẨM - @Html.DisplayFor(model => model.CateName)</h1>
+    <div class="container px-lg-5 mt-4">
+        <div class="row gx-4 gx-lg-2 row-cols-xl-4 justify-content-center">
+            @foreach (var item in Model.Products)
+            {
+                <div class="col mb-5">
+                <div class="card">
+                    <a asp-action="Details" asp-route-id="@item.Id">
+                        <img src="@item.ImageUrl" class="card-img-top" alt="...">
+                    </a>
+                    <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-Id="@item.Id" asp-route-quantity="@quantity" class="position-absolute">
+                        <div>
+                            <i class="bi bi-cart-plus"></i>
+                        </div>
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <p>@item.Price.ToString("#,##0") VNĐ</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</section>

@@ -1,4 +1,5 @@
 ﻿@model DoAnCoSo_WebBanMoHinh.Models.Product
+@using System.Security.Claims
 
 @{
     string pname = Model.Name;
@@ -21,12 +22,16 @@
                 <div id="ProductCarousel" class="carousel carousel-dark slide mb-5">
                     <div class="carousel-inner">
                         <div class="carousel-item active c-item">
-                            <img src="@Model.ImageUrl" class="d-block c-img" alt="Image Active">
+                            <div class="zoom-container">
+                                <img src="@Model.ImageUrl" class="d-block c-img" alt="Image Active" data-bs-toggle="modal" data-bs-target="#imageModal">
+                            </div>
                         </div>
                         @foreach (var item in Images)
                         {
                             <div class="carousel-item c-item">
-                                <img src="@item.Url" class="d-block c-img" alt="Image">
+                                <div class="zoom-container">
+                                    <img src="@item.Url" class="d-block c-img" alt="Image" data-bs-toggle="modal" data-bs-target="#imageModal">
+                                </div>
                             </div>
                         }
                     </div>
@@ -47,15 +52,84 @@
                     <span>Loại sản phẩm: @Html.DisplayFor(model => model.Category.CateName)</span> <br />
                     <span>Hãng: @Html.DisplayFor(model => model.Company.CompName)</span>
                 </div>
-                <p class="lead">@Html.DisplayFor(model => model.Description)</p>
                 <div class="d-flex">
-                    <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-Id="@Model.Id">
+                    <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-Id="@Model.Id" class="me-2">
                         <button class="btn btn-outline-dark flex-shrink-0" type="button">
                             <i class="bi-cart-fill me-1"></i>Thêm Vào Giỏ
                         </button>
                     </a>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                        var isFavorite = Model.FavoriteProducts?.Any(u => u.ProductId == Model.Id && u.User.Id == userId) ?? false;
+                        if (!isFavorite)
+                        {
+                            <a asp-controller="Products" asp-action="AddToFavorites" asp-route-Id="@Model.Id">
+                                <button class="btn btn-outline-danger flex-shrink-0" type="button">
+                                    <i class="bi-heart me-1"></i>Yêu Thích
+                                </button>
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Products" asp-action="RemoveFromFavorites" asp-route-Id="@Model.Id">
+                                <button class="btn btn-danger flex-shrink-0" type="button">
+                                    <i class="bi-heart-fill me-1"></i>Bỏ Yêu Thích
+                                </button>
+                            </a>
+                        }
+                    }
+                    else
+                    {
+                        <a asp-area="Identity" asp-page="/Account/Login">
+                            <button class="btn btn-outline-danger flex-shrink-0" type="button">
+                                <i class="bi-heart me-1"></i>Yêu Thích
+                            </button>
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-item">
+        <a href="javascript:void(0);" class="d-flex align-items-center open-tabs">
+            <i class="fa fa-chevron-up d-inline-block text-center toggle-icon"></i>
+            <span class="d-inline-block ms-2">Thông tin bổ sung</span>
+        </a>
+        <div class="content-tab" style="display: none;">
+            <p class="lead">@Html.DisplayFor(model => model.Description)</p>
+        </div>
+    </div>
+    </div>
+
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img id="modalImage" src="" alt="Enlarged Image">
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const openTabs = document.querySelector('.open-tabs');
+        const contentTab = document.querySelector('.content-tab');
+        const toggleIcon = document.querySelector('.toggle-icon');
+
+        openTabs.addEventListener('click', function () {
+            if (contentTab.style.display === 'none' || contentTab.style.display === '') {
+                contentTab.style.display = 'block';
+                toggleIcon.classList.remove('fa-chevron-down');
+                toggleIcon.classList.add('fa-chevron-up');
+            } else {
+                contentTab.style.display = 'none';
+                toggleIcon.classList.remove('fa-chevron-up');
+                toggleIcon.classList.add('fa-chevron-down');
+            }
+        });
+    });
+</script>

@@ -12,5 +12,6 @@ namespace DoAnCoSo_WebBanMoHinh.Models
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<FavoriteProduct> FavoriteProducts { get; set; }
     }
 }

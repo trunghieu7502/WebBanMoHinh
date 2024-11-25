@@ -9,86 +9,86 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <div class="card text-white border-primary mb-3" style="border-radius: 1rem; background:#363636">
-                <div class="card-header">Thông tin khách hàng</div>
-                <div class="card-body">
-                    <p><strong>Email:</strong> @Model.User.Email</p>
-                    <p><strong>Tên:</strong> @Model.User.UserName</p>
-                    <p><strong>Số điện thoại:</strong> @Model.User.PhoneNumber</p>
-                    <hr>
-                    <h5 class="card-title">Thông tin giao hàng</h5>
-                    <form asp-action="Checkout" method="post">
-                        <div class="form-group">
-                            <label for="Address">Địa chỉ giao hàng</label>
-                            <input type="text" class="form-control" id="Address" name="Address" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="City">Tỉnh / Thành</label>
-                            <select class="form-control" id="City" name="City" required>
-                                <option value="">Chọn Tỉnh / Thành</option>
-                                <option value="Hà Nội">Hà Nội</option>
-                                <option value="TP Hồ Chí Minh">TP Hồ Chí Minh</option>
-                                <option value="Đà Nẵng">Đà Nẵng</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="District">Quận / Huyện</label>
-                            <select class="form-control" id="District" name="District" required>
-                                <!-- Options for districts will be dynamically added by JavaScript -->
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="Ward">Phường / Xã</label>
-                            <select class="form-control" id="Ward" name="Ward" required>
-                                <!-- Options for wards will be dynamically added by JavaScript -->
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="PaymentMethod">Phương thức thanh toán</label>
-                            <select class="form-control" id="PaymentMethod" name="PaymentMethod" required>
-                                <option value="COD">Thanh toán khi giao hàng (COD)</option>
-                                <option value="VNPAY">Chuyển khoản VNPAY</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="Notes">Ghi chú</label>
-                            <input type="text" class="form-control" id="Notes" name="Notes">
-                        </div>
-                        <br>
-                        <button type="submit" class="btn btn-primary">Hoàn tất đơn hàng</button>
-                    </form>
-                </div>
+            <div class="p-4" style="background: #f8f9fa; border-radius: 1rem; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                <h5 class="mb-3">Thông tin khách hàng</h5>
+                <p><strong>Email:</strong> @Model.User.Email</p>
+                <p><strong>Tên:</strong> @Model.User.UserName</p>
+                <p><strong>Số điện thoại:</strong> @Model.User.PhoneNumber</p>
+                <hr>
+                <h5 class="mb-3">Thông tin giao hàng</h5>
+                <form asp-action="Checkout" method="post">
+                    <div class="form-group mb-3">
+                        <label for="Address">Địa chỉ giao hàng</label>
+                        <input type="text" class="form-control" id="Address" name="Address" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="City">Tỉnh / Thành</label>
+                        <select class="form-control" id="City" name="City" required>
+                            <option value="">Chọn Tỉnh / Thành</option>
+                            <option value="Hà Nội">Hà Nội</option>
+                            <option value="TP Hồ Chí Minh">TP Hồ Chí Minh</option>
+                            <option value="Đà Nẵng">Đà Nẵng</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="District">Quận / Huyện</label>
+                        <select class="form-control" id="District" name="District" required>
+                            <!-- Options for districts will be dynamically added by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="Ward">Phường / Xã</label>
+                        <select class="form-control" id="Ward" name="Ward" required>
+                            <!-- Options for wards will be dynamically added by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="PaymentMethod">Phương thức thanh toán</label>
+                        <select class="form-control" id="PaymentMethod" name="PaymentMethod" required>
+                            <option value="COD">Thanh toán khi giao hàng (COD)</option>
+                            <option value="VNPAY">Chuyển khoản VNPAY</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="Notes">Ghi chú</label>
+                        <input type="text" class="form-control" id="Notes" name="Notes">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Hoàn tất đơn hàng</button>
+                </form>
             </div>
         </div>
         <div class="col-md-6">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Tên sản phẩm</th>
-                        <th>Hình ảnh</th>
-                        <th>Số lượng</th>
-                        <th>Giá</th>
-                        <th>Tổng giá</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.Cart.Items)
-                    {
+            <div class="p-4" style="background: #f8f9fa; border-radius: 1rem; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                <h5 class="mb-3">Chi tiết đơn hàng</h5>
+                <table class="table">
+                    <thead>
                         <tr>
-                            <td>@item.Name</td>
-                            <td>
-                                <img src="@item.ImageUrl" alt="@item.Name" class="img-thumbnail" width="100">
-                            </td>
-                            <td>@item.Quantity</td>
-                            <td>@string.Format("{0:0,0}", item.Price) VNĐ</td>
-                            <td>@string.Format("{0:0,0}", item.Price * item.Quantity) VNĐ</td>
+                            <th>Tên sản phẩm</th>
+                            <th>Hình ảnh</th>
+                            <th>Số lượng</th>
+                            <th>Giá</th>
+                            <th>Tổng giá</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
-            <h4 class="text-right">
-                Tổng cộng: @String.Format("{0:0,0}", Model.Cart.Items.Sum(i => i.Quantity * i.Price)) VNĐ
-            </h4>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Cart.Items)
+                        {
+                            <tr>
+                                <td>@item.Name</td>
+                                <td>
+                                    <img src="@item.ImageUrl" alt="@item.Name" class="img-thumbnail" width="100">
+                                </td>
+                                <td>@item.Quantity</td>
+                                <td>@string.Format("{0:0,0}", item.Price) VNĐ</td>
+                                <td>@string.Format("{0:0,0}", item.Price * item.Quantity) VNĐ</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <h4 class="text-end">
+                    Tổng cộng: @String.Format("{0:0,0}", Model.Cart.Items.Sum(i => i.Quantity * i.Price)) VNĐ
+                </h4>
+            </div>
         </div>
     </div>
 </div>
@@ -96,8 +96,10 @@
 <script>
     var data = {
         "Hà Nội": {
-            "Ba Đình": ["Phúc Xá", "Trúc Bạch", "Vĩnh Phúc"],
-            "Hoàn Kiếm": ["Phúc Tân", "Cửa Đông", "Hàng Bạc"],
+            "Ba Đình": ["Phúc Xá", "Trúc Bạch", "Vĩnh Phúc", "Cống Vị", "Liễu Giai", "Nguyễn Trung Trực", "Quán Thánh"],
+            "Hoàn Kiếm": ["Phúc Tân", "Đồng Xuân", "Cửa Đông", "Hàng Mã", "Hàng Bườm", "Hàng Bạc"],
+            "Tây Hồ": ["Phú Thượng", "Nhật Tân", "Tứ Liên", "Quảng An", "Xuân La", "Yên Phụ"],
+            "Long Biên": ["Thượng Thanh", "Ngọc Thủy", "Giang Biên", "Đức Giang", "Việt Hưng", "Gia Thụy"],
         },
         "TP Hồ Chí Minh": {
             "Quận 1": ["Bến Nghé", "Bến Thành", "Cô Giang"],

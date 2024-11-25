@@ -34,5 +34,6 @@ namespace DoAnCoSo_WebBanMoHinh.Models
         public Company? Company { get; set; }
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
+        public List<FavoriteProduct>? FavoriteProducts { get; set; }
     }
 }

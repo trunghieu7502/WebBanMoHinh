@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<DoAnCoSo_WebBanMoHinh.Models.Product>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Trang Chủ";
     int quantity = 1;
 }
 
@@ -33,39 +33,36 @@
 </div>
 
 <section class="py-2">
-    <h1 class="text-center">DANH SÁCH SẢN PHẨM</h1>
-    <div class="container px-4 px-lg-5 mt-4">
-        <div class="row gx-4 gx-lg-5 row-cols-xl-4 justify-content-center">
-            @foreach (var item in Model)
-            {
-                    <div class="col mb-5">
-                        <div class="card" style="width: 17rem">
-                            <a asp-action="Details" asp-route-id="@item.Id">
-                                <img src="@item.ImageUrl" class="card-img-top" alt="..." style="height: 250px" a asp-action="Details" asp-route-id="@item.Id">
-                            </a>
-                            <div class="card-body">
-                                <h6 class="card-title">
-                                    @Html.DisplayFor(modelItem => item.Company.CompName)
-                                </h6>
-                                <h5 class="card-title">
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </h5>
-                                <div class="d-flex">
-                                    <span>Giá: </span>
-                                    <p class="mx-3">@item.Price.ToString("#,##0") VNĐ</p>
-                                </div>
-                                <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-Id="@item.Id" asp-route-quantity="@quantity">
-                                    <button class="btn btn-outline-dark">
-                                        <i class="bi-cart-fill me-1"></i> Thêm Vào Giỏ
-                                    </button>
-                                </a>
-                            </div>
+    <h2 class="section-title">
+        <hr><span>DANH SÁCH SẢN PHẨM</span><hr>
+    </h2>
+</section>
+<div class="container px-4 px-lg-5 mt-4">
+    <div class="row gx-4 gx-lg-5 row-cols-xl-4 justify-content-center">
+        @foreach (var item in Model)
+        {
+            <div class="col mb-5">
+                <div class="card">
+                    <a asp-action="Details" asp-route-id="@item.Id">
+                        <img src="@item.ImageUrl" class="card-img-top" alt="...">
+                    </a>
+                    <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-Id="@item.Id" asp-route-quantity="@quantity"
+                       class="position-absolute">
+                        <div>
+                            <i class="bi bi-cart-plus"></i>
+                        </div>
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <p>@item.Price.ToString("#,##0") VNĐ</p>
                         </div>
                     </div>
-            }
-        </div>
+                </div>
+            </div>
+        }
     </div>
-</section>
+</div>
 
 <script>
     const myCarouselElement = document.querySelector('#BannerCarousel')

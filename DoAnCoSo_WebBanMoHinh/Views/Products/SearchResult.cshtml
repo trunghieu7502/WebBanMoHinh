@@ -1,7 +1,8 @@
 ﻿@model IEnumerable<DoAnCoSo_WebBanMoHinh.Models.Product>
 
 @{
-    ViewData["Title"] = "SearchResault";
+    ViewData["Title"] = "SearchResult";
+    int quantity = 1;
 }
 
 <section class="py-2">
@@ -21,23 +22,20 @@
                 @foreach (var item in Model)
                 {
                     <div class="col mb-5">
-                        <div class="card gap-3" style="width: 19rem">
+                        <div class="card">
                             <a asp-action="Details" asp-route-id="@item.Id">
-                                <img src="@item.ImageUrl" class="card-img-top" alt="..." style="height: 250px" a asp-action="Details" asp-route-id="@item.Id">
+                                <img src="@item.ImageUrl" class="card-img-top" alt="...">
+                            </a>
+                            <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-Id="@item.Id" asp-route-quantity="@quantity" class="position-absolute">
+                                <div>
+                                    <i class="bi bi-cart-plus"></i>
+                                </div>
                             </a>
                             <div class="card-body">
-                                <h5 class="card-title">
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </h5>
-                                <div class="d-flex">
-                                    <span>Giá: </span>
-                                    <p class="mx-3">@item.Price.ToString("#,##0") VNĐ</p>
+                                <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <p>@item.Price.ToString("#,##0") VNĐ</p>
                                 </div>
-                                <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-Id="@item.Id">
-                                    <button class="btn btn-outline-dark">
-                                        <i class="bi-cart-fill me-1"></i> Thêm Vào Giỏ
-                                    </button>
-                                </a>
                             </div>
                         </div>
                     </div>

@@ -5,12 +5,19 @@
 
 <div class="dropdown">
     <button class="btn btn-secondary" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-person-circle"> Tài Khoản</i>
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <span class="bi bi-person-circle"> @UserManager.GetUserName(User)</span>
+        }
+        else
+        {
+            <i class="bi bi-person-circle"> Tài Khoản</i>
+        }
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
         @if (SignInManager.IsSignedIn(User))
         {
-            <li><a id="manage" class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a></li>
+            <li><a id="manage" class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Thông tin tài khoản</a></li>
             if (User.IsInRole(WebRoles.Role_Admin))
             {
                 <li>
