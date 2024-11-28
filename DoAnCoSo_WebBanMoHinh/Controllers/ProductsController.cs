@@ -47,6 +47,7 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             {
                 ViewBag.Images = product.Images;
             }
+            ViewBag.FavoriteProducts = product.FavoriteProducts;
             return View(product);
         }
 
@@ -113,13 +114,14 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-            var existingFavorite = await _context.FavoriteProducts.FirstOrDefaultAsync(f => f.ProductId == product.Id && f.User.Id == userId);
+            var existingFavorite = await _context.FavoriteProducts.FirstOrDefaultAsync(u => u.ProductId == product.Id && u.User.Id == userId);
             if (existingFavorite == null)
             {
                 var favoriteProduct = new FavoriteProduct
                 {
                     ProductId = product.Id,
-                    User = await _context.Users.FindAsync(userId)
+                    User = await _context.Users.FindAsync(userId),
+                    UserID = userId
                 };
                 _context.FavoriteProducts.Add(favoriteProduct);
                 await _context.SaveChangesAsync();
@@ -127,22 +129,21 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             return RedirectToAction("Details", "Products", new { id = product.Id });
         }
 
-        //public async Task<IActionResult> RemoveFromFavorite(int productId)
-        //{
-        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get the logged-in user ID
-        //    if (userId == null)
-        //    {
-        //        return RedirectToAction("Login", "Account"); // Redirect to login if the user is not authenticated
-        //    }
-        //    // Find the favorite entry for the given product and user
-        //    var favoriteProduct = await _context.FavoriteProducts
-        //        .FirstOrDefaultAsync(f => f.ProductId == productId && f.User.Id == userId);
-        //    if (favoriteProduct != null)
-        //    {
-        //        _context.FavoriteProducts.Remove(favoriteProduct); // Remove the favorite product
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    return RedirectToAction("Details", "Products", new { id = productId });
-        //}
+        public async Task<IActionResult> RemoveFromFavorites(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var product = await _productRepository.GetByIdAsync(id);
+            if (!User.Identity?.IsAuthenticated ?? false)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var existingFavorite = await _context.FavoriteProducts.FirstOrDefaultAsync(u => u.ProductId == product.Id && u.User.Id == userId);
+            if (existingFavorite != null)
+            {
+                _context.FavoriteProducts.Remove(existingFavorite);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("Details", "Products", new { id = product.Id });
+        }
     }
 }

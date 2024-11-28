@@ -5,6 +5,7 @@
     string pname = Model.Name;
     ViewData["Title"] = $"{pname}";
     var Images = ViewBag.Images;
+    var FavoriteProducts = ViewBag.FavoriteProducts;
 }
 
 <nav aria-label="breadcrumb">
@@ -61,23 +62,27 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                        var isFavorite = Model.FavoriteProducts?.Any(u => u.ProductId == Model.Id && u.User.Id == userId) ?? false;
-                        if (!isFavorite)
+                        var IsFavorite = Model.FavoriteProducts?.Any(u => u.ProductId == Model.Id && u.UserID == userId) ?? false;
+                        @*                         foreach(var item in FavoriteProducts)
                         {
-                            <a asp-controller="Products" asp-action="AddToFavorites" asp-route-Id="@Model.Id">
-                                <button class="btn btn-outline-danger flex-shrink-0" type="button">
-                                    <i class="bi-heart me-1"></i>Yêu Thích
-                                </button>
-                            </a>
-                        }
-                        else
-                        {
-                            <a asp-controller="Products" asp-action="RemoveFromFavorites" asp-route-Id="@Model.Id">
-                                <button class="btn btn-danger flex-shrink-0" type="button">
-                                    <i class="bi-heart-fill me-1"></i>Bỏ Yêu Thích
-                                </button>
-                            </a>
-                        }
+                            if (!(item.ProductId == Model.Id && item.UserID == userId)) *@
+                            if(!IsFavorite)
+                            {
+                                <a asp-controller="Products" asp-action="AddToFavorites" asp-route-Id="@Model.Id">
+                                    <button class="btn btn-outline-danger flex-shrink-0" type="button">
+                                        <i class="bi-heart me-1"></i>Yêu Thích
+                                    </button>
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Products" asp-action="RemoveFromFavorites" asp-route-Id="@Model.Id">
+                                    <button class="btn btn-danger flex-shrink-0" type="button">
+                                        <i class="bi-heart-fill me-1"></i>Bỏ Yêu Thích
+                                    </button>
+                                </a>
+                            }
+@*                         } *@
                     }
                     else
                     {
