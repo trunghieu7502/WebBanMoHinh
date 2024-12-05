@@ -45,7 +45,8 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
                 Name = product.Name,
                 ImageUrl = product.ImageUrl,
                 Price = product.Price,
-                Quantity = quantity
+                Quantity = quantity,
+                Stock = product.Stock,
             };
             var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new ShoppingCart();
             cart.AddItem(cartItem);
@@ -103,42 +104,6 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
             var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
-            if(model.PaymentMethod == "VNPAY")
-            {
-                var vnPayModel = new VNPayRequestModel
-                {
-                    Amount = (double)cart.Items.Sum(p => p.Price * p.Quantity),
-                    CreatedDate = DateTime.Now,
-                    Description = "Đơn hàng thành công",
-                    FullName = user.UserName,
-                    OrderId = new Random().Next(100, 1000)
-                };
-                if (cart == null || !cart.Items.Any())
-                {
-                    return RedirectToAction("Index");
-                }
-                order.UserId = user.Id;
-                order.UserName = user.UserName;
-                order.OrderDate = DateTime.UtcNow;
-                order.TotalPrice = cart.Items.Sum(i => i.Price * i.Quantity);
-                order.IsDone = false;
-                order.ShippingAddress = model.Address;
-                order.City = model.City;
-                order.District = model.District;
-                order.Ward = model.Ward;
-                order.PaymentMethod = model.PaymentMethod;
-                order.Notes = model.Notes;
-                order.OrderDetails = cart.Items.Select(i => new OrderDetail
-                {
-                    ProductId = i.Id,
-                    Quantity = i.Quantity,
-                    Price = i.Price
-                }).ToList();
-                _context.Orders.Add(order);
-                await _context.SaveChangesAsync();
-                HttpContext.Session.Remove("Cart");
-                return Redirect(_vnPayService.CreatePaymentUrl(HttpContext, vnPayModel));
-            }
             if (cart == null || !cart.Items.Any())
             {
                 return RedirectToAction("Index");
@@ -160,11 +125,42 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
                 Quantity = i.Quantity,
                 Price = i.Price
             }).ToList();
-
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
-            HttpContext.Session.Remove("Cart"); // Xóa giỏ hàng khỏi session
-            return View("OrderCompleted", order); // Trang xác nhận hoàn thành đơn hàng
+            foreach (var item in cart.Items)
+            {
+                var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == item.Id);
+                if (product == null)
+                {
+                    continue;
+                }
+                if (product.Stock < item.Quantity)
+                {
+                    ModelState.AddModelError("", $"Không đủ số lượng mua sản phẩm!");
+                    return View(model);
+                }
+                product.Stock -= item.Quantity;
+                if (product.Stock == 0)
+                {
+                    product.Status = false;
+                }
+                _context.Update(product);
+            }
+            await _context.SaveChangesAsync();
+            HttpContext.Session.Remove("Cart");
+            if (model.PaymentMethod == "VNPAY")
+            {
+                var vnPayModel = new VNPayRequestModel
+                {
+                    Amount = (double)cart.Items.Sum(p => p.Price * p.Quantity),
+                    CreatedDate = DateTime.Now,
+                    Description = "Đơn hàng thành công",
+                    FullName = user.UserName,
+                    OrderId = new Random().Next(100, 1000)
+                };
+                return Redirect(_vnPayService.CreatePaymentUrl(HttpContext, vnPayModel));
+            }
+            return View("OrderCompleted", order);
         }
 
         public IActionResult PaymentSuccess()

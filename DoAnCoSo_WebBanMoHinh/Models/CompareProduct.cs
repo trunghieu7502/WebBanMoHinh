@@ -1,6 +1,6 @@
 ﻿namespace DoAnCoSo_WebBanMoHinh.Models
 {
-    public class FavoriteProduct
+    public class CompareProduct
     {
         public int Id { get; set; }
         public ApplicationUser User { get; set; }

@@ -6,6 +6,7 @@
     ViewData["Title"] = $"{pname}";
     var Images = ViewBag.Images;
     var FavoriteProducts = ViewBag.FavoriteProducts;
+    var CompareProducts = ViewBag.CompareProducts;
 }
 
 <nav aria-label="breadcrumb">
@@ -51,24 +52,32 @@
                 <div class="fs-5 mb-5">
                     <span>Giá: @Model.Price.ToString("#,##0") VNĐ</span> <br />
                     <span>Loại sản phẩm: @Html.DisplayFor(model => model.Category.CateName)</span> <br />
-                    <span>Hãng: @Html.DisplayFor(model => model.Company.CompName)</span>
+                    <span>Hãng: @Html.DisplayFor(model => model.Company.CompName)</span> <br />
+                    <span>Còn lại: @Html.DisplayFor(model => model.Stock)</span>
                 </div>
                 <div class="d-flex">
-                    <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-Id="@Model.Id" class="me-2">
-                        <button class="btn btn-outline-dark flex-shrink-0" type="button">
-                            <i class="bi-cart-fill me-1"></i>Thêm Vào Giỏ
+                    @if (Model.Status == false)
+                    {
+                        <button class="btn btn-outline-dark flex-shrink-0" type="button" disabled>
+                            <i class="bi-cart-fill me-1"></i> Sản phẩm đã hết hàng
                         </button>
-                    </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-Id="@Model.Id" class="me-2">
+                            <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                                <i class="bi-cart-fill me-1"></i>Thêm Vào Giỏ
+                            </button>
+                        </a>
+                    }
+                    
                     @if (User.Identity.IsAuthenticated)
                     {
                         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                         var IsFavorite = Model.FavoriteProducts?.Any(u => u.ProductId == Model.Id && u.UserID == userId) ?? false;
-                        @*                         foreach(var item in FavoriteProducts)
-                        {
-                            if (!(item.ProductId == Model.Id && item.UserID == userId)) *@
                             if(!IsFavorite)
                             {
-                                <a asp-controller="Products" asp-action="AddToFavorites" asp-route-Id="@Model.Id">
+                            <a asp-controller="Products" asp-action="AddToFavorites" asp-route-Id="@Model.Id" class="me-2">
                                     <button class="btn btn-outline-danger flex-shrink-0" type="button">
                                         <i class="bi-heart me-1"></i>Yêu Thích
                                     </button>
@@ -76,19 +85,47 @@
                             }
                             else
                             {
-                                <a asp-controller="Products" asp-action="RemoveFromFavorites" asp-route-Id="@Model.Id">
+                            <a asp-controller="Products" asp-action="RemoveFromFavorites" asp-route-Id="@Model.Id" class="me-2">
                                     <button class="btn btn-danger flex-shrink-0" type="button">
                                         <i class="bi-heart-fill me-1"></i>Bỏ Yêu Thích
                                     </button>
                                 </a>
                             }
-@*                         } *@
+                    }
+                    else
+                    {
+                        <a asp-area="Identity" asp-page="/Account/Login" class="me-2">
+                            <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                                <i class="bi-heart me-1"></i>Đăng Nhập để Yêu Thích
+                            </button>
+                        </a>
+                    }
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                        var Compared = Model.CompareProducts?.Any(u => u.ProductId == Model.Id && u.UserID == userId) ?? false;
+                        if (!Compared)
+                        {
+                            <a asp-controller="Products" asp-action="AddToCompare" asp-route-Id="@Model.Id">
+                                <button class="btn btn-outline-danger flex-shrink-0" type="button">
+                                    <i class="bi-chevron-contract me-1"></i>So Sánh
+                                </button>
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Products" asp-action="RemoveFromCompares" asp-route-Id="@Model.Id">
+                                <button class="btn btn-danger flex-shrink-0" type="button">
+                                    <i class="bi-chevron-contract me-1"></i>Bỏ So Sánh
+                                </button>
+                            </a>
+                        }
                     }
                     else
                     {
                         <a asp-area="Identity" asp-page="/Account/Login">
-                            <button class="btn btn-outline-danger flex-shrink-0" type="button">
-                                <i class="bi-heart me-1"></i>Yêu Thích
+                            <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                                <i class="bi-chevron-contract me-1"></i>Đăng Nhập để So Sánh
                             </button>
                         </a>
                     }

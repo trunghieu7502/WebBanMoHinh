@@ -1,0 +1,38 @@
+﻿@model IEnumerable<DoAnCoSo_WebBanMoHinh.Models.Product>
+
+@{
+    ViewData["Title"] = "Danh Sách Yêu Thích";
+    int quantity = 1;
+}
+
+<h1>Danh Sách Yêu Thích</h1>
+
+@if (!Model.Any())
+{
+    <p>Không có sản phẩm nào trong danh sách yêu thích.</p>
+}
+else
+{
+    <div class="container px-4 px-lg-5 mt-4">
+        <div class="row gx-4 gx-lg-5 row-cols-xl-4 justify-content-center">
+            @foreach (var product in Model)
+            {
+                <div class="col mb-5">
+                    <div class="card">
+                        <a asp-action="Details" asp-route-id="@product.Id">
+                            <img src="@product.ImageUrl" class="card-img-top" alt="...">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title">@product.Name</h5>
+                            <p class="card-text">Giá: @product.Price.ToString("#,##0") VNĐ</p>
+                            <div class="d-flex justify-content-center">
+                                <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-Id="@product.Id" asp-route-quantity="@quantity" class="btn btn-outline-dark">Thêm Vào Giỏ</a>
+                                <a asp-action="RemoveFromFavorites" asp-controller="Products" asp-route-id="@product.Id" class="btn btn-danger me-3">Xóa</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}

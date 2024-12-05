@@ -271,13 +271,18 @@ footer {
     position: relative;
     overflow: hidden;
     width: 100%;
-    height: auto;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
 }
 
 .zoom-container img {
-    transition: transform 0.5s ease;
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
 }
 
 .zoom-container:hover img {

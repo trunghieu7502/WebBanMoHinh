@@ -24,6 +24,8 @@ namespace DoAnCoSo_WebBanMoHinh.Models
 
         [DisplayName("Tình trạng tồn sản phẩm")]
         public bool Status { get; set; }
+        [DisplayName("Số lượng tồn")]
+        public int Stock { get; set; }
 
         [DisplayName("Ảnh đại diện")]
         public string? ImageUrl { get; set; }
@@ -35,5 +37,6 @@ namespace DoAnCoSo_WebBanMoHinh.Models
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
         public List<FavoriteProduct>? FavoriteProducts { get; set; }
+        public List<CompareProduct>? CompareProducts { get; set; }
     }
 }

@@ -16,6 +16,9 @@
                 @Html.DisplayNameFor(model => model.Price)
             </th>
             <th>
+                Tồn
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
@@ -38,6 +41,9 @@
             </td>
             <td>
                 <p>@item.Price.ToString("#,##0") VNĐ</p>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stock)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Status)

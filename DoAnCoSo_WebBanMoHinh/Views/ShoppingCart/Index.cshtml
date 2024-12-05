@@ -39,7 +39,7 @@ else
                                     <img src="@item.ImageUrl" width="100px" height="100px" alt="@Html.DisplayFor(modelItem => item.Name)">
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control" min="1" id="txtQuantity_@item.Id" name="txtQuantity" onchange="updateCart('@item.Id')" value="@item.Quantity" />
+                                    <input type="number" class="form-control" min="1" max="@item.Stock" id="txtQuantity_@item.Id" name="txtQuantity" onchange="updateCart('@item.Id')" value="@item.Quantity" />
                                 </td>
                                 <td>@string.Format("{0:0,0}", item.Price) VNĐ</td>
                                 <td>@string.Format("{0:0,0}", item.Price * item.Quantity) VNĐ</td>

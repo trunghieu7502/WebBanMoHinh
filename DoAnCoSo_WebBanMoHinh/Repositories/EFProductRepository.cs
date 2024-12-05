@@ -17,7 +17,7 @@ namespace DoAnCoSo_WebBanMoHinh.Repositories
         public async Task<Product> GetByIdAsync(int id)
         {
             // lấy thông tin kèm theo category
-            return await _context.Products.Include(p => p.Category).Include(x => x.Company).Include(x => x.Images).Include(x => x.FavoriteProducts).SingleOrDefaultAsync(p => p.Id == id);
+            return await _context.Products.Include(p => p.Category).Include(x => x.Company).Include(x => x.Images).Include(x => x.FavoriteProducts).Include(x => x.CompareProducts).SingleOrDefaultAsync(p => p.Id == id);
         }
         public async Task AddAsync(Product product)
         {

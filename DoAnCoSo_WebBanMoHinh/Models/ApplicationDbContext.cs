@@ -13,5 +13,6 @@ namespace DoAnCoSo_WebBanMoHinh.Models
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<FavoriteProduct> FavoriteProducts { get; set; }
+        public DbSet<CompareProduct> CompareProducts { get; set; }
     }
 }

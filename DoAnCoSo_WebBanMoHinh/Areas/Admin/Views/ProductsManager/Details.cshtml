@@ -17,7 +17,8 @@
                 <h3>Giá: @Model.Price.ToString("#,##0") VNĐ</h3>
                 <div class="fs-5 mb-2">
                     <span>Loại sản phẩm: @Html.DisplayFor(model => model.Category.CateName)</span>
-                    <span class="ms-4">Hãng: @Html.DisplayFor(model => model.Company.CompName)</span>
+                    <span class="ms-4">Hãng: @Html.DisplayFor(model => model.Company.CompName)</span> <br />
+                    <span>Còn lại: @Html.DisplayFor(model => model.Stock)</span>
                 </div>
                 <div class="d-flex">
                     <a asp-area="Admin" asp-controller="ProductsManager" asp-action="Edit" asp-route-id="@Model.Id">

@@ -48,6 +48,7 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
                 ViewBag.Images = product.Images;
             }
             ViewBag.FavoriteProducts = product.FavoriteProducts;
+            ViewBag.CompareProducts = product.CompareProducts;
             return View(product);
         }
 
@@ -106,13 +107,32 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             return View(company);
         }
 
+        public async Task<IActionResult> FavoriteList()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!User.Identity?.IsAuthenticated ?? false)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var favoriteProducts = await _context.FavoriteProducts
+                .Include(fp => fp.Product)
+                .ThenInclude(p => p.Category)
+                .Include(fp => fp.Product.Company)
+                .Where(fp => fp.UserID == userId)
+                .Select(fp => fp.Product)
+                .ToListAsync();
+
+            return View(favoriteProducts);
+        }
+
         public async Task<IActionResult> AddToFavorites(int id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var product = await _productRepository.GetByIdAsync(id);
             if (!User.Identity?.IsAuthenticated ?? false)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Details", "Products", new { id = product.Id });
             }
             var existingFavorite = await _context.FavoriteProducts.FirstOrDefaultAsync(u => u.ProductId == product.Id && u.User.Id == userId);
             if (existingFavorite == null)
@@ -135,7 +155,7 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             var product = await _productRepository.GetByIdAsync(id);
             if (!User.Identity?.IsAuthenticated ?? false)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Details", "Products", new { id = product.Id });
             }
             var existingFavorite = await _context.FavoriteProducts.FirstOrDefaultAsync(u => u.ProductId == product.Id && u.User.Id == userId);
             if (existingFavorite != null)
@@ -144,6 +164,65 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction("Details", "Products", new { id = product.Id });
+        }
+
+        public async Task<IActionResult> Comparation()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!User.Identity?.IsAuthenticated ?? false)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var compareProducts = await _context.CompareProducts
+                .Include(fp => fp.Product)
+                .ThenInclude(p => p.Category)
+                .Include(fp => fp.Product.Company)
+                .Where(fp => fp.UserID == userId)
+                .Select(fp => fp.Product)
+                .ToListAsync();
+
+            return View(compareProducts);
+        }
+
+        public async Task<IActionResult> AddToCompare(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var product = await _productRepository.GetByIdAsync(id);
+            if (!User.Identity?.IsAuthenticated ?? false)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var existingComparation = await _context.CompareProducts.FirstOrDefaultAsync(u => u.ProductId == product.Id && u.User.Id == userId);
+            if (existingComparation == null)
+            {
+                var compareProduct = new CompareProduct
+                {
+                    ProductId = product.Id,
+                    User = await _context.Users.FindAsync(userId),
+                    UserID = userId
+                };
+                _context.CompareProducts.Add(compareProduct);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("Comparation", "Products");
+        }
+
+        public async Task<IActionResult> RemoveFromCompares(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var product = await _productRepository.GetByIdAsync(id);
+            if (!User.Identity?.IsAuthenticated ?? false)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var existingComparation = await _context.CompareProducts.FirstOrDefaultAsync(u => u.ProductId == product.Id && u.User.Id == userId);
+            if (existingComparation != null)
+            {
+                _context.CompareProducts.Remove(existingComparation);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("Comparation", "Products");
         }
     }
 }
