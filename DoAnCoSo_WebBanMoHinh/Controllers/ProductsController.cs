@@ -112,7 +112,7 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!User.Identity?.IsAuthenticated ?? false)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
 
             var favoriteProducts = await _context.FavoriteProducts
@@ -122,17 +122,16 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
                 .Where(fp => fp.UserID == userId)
                 .Select(fp => fp.Product)
                 .ToListAsync();
-
             return View(favoriteProducts);
         }
 
-        public async Task<IActionResult> AddToFavorites(int id)
+        public async Task<IActionResult> AddToFavorites(int id, string returnUrl)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var product = await _productRepository.GetByIdAsync(id);
             if (!User.Identity?.IsAuthenticated ?? false)
             {
-                return RedirectToAction("Details", "Products", new { id = product.Id });
+                return RedirectToAction("Login", "Account", new { returnUrl = returnUrl ?? Request.Headers["Referer"].ToString() });
             }
             var existingFavorite = await _context.FavoriteProducts.FirstOrDefaultAsync(u => u.ProductId == product.Id && u.User.Id == userId);
             if (existingFavorite == null)
@@ -146,16 +145,16 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
                 _context.FavoriteProducts.Add(favoriteProduct);
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction("Details", "Products", new { id = product.Id });
+            return Redirect(returnUrl ?? Request.Headers["Referer"].ToString());
         }
 
-        public async Task<IActionResult> RemoveFromFavorites(int id)
+        public async Task<IActionResult> RemoveFromFavorites(int id, string returnUrl)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var product = await _productRepository.GetByIdAsync(id);
             if (!User.Identity?.IsAuthenticated ?? false)
             {
-                return RedirectToAction("Details", "Products", new { id = product.Id });
+                return RedirectToAction("Login", "Account", new { returnUrl = returnUrl ?? Request.Headers["Referer"].ToString() });
             }
             var existingFavorite = await _context.FavoriteProducts.FirstOrDefaultAsync(u => u.ProductId == product.Id && u.User.Id == userId);
             if (existingFavorite != null)
@@ -163,7 +162,7 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
                 _context.FavoriteProducts.Remove(existingFavorite);
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction("Details", "Products", new { id = product.Id });
+            return Redirect(returnUrl ?? Request.Headers["Referer"].ToString());
         }
 
         public async Task<IActionResult> Comparation()
@@ -171,7 +170,7 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!User.Identity?.IsAuthenticated ?? false)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
 
             var compareProducts = await _context.CompareProducts
@@ -191,7 +190,7 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             var product = await _productRepository.GetByIdAsync(id);
             if (!User.Identity?.IsAuthenticated ?? false)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
             var existingComparation = await _context.CompareProducts.FirstOrDefaultAsync(u => u.ProductId == product.Id && u.User.Id == userId);
             if (existingComparation == null)
@@ -214,7 +213,7 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             var product = await _productRepository.GetByIdAsync(id);
             if (!User.Identity?.IsAuthenticated ?? false)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
             var existingComparation = await _context.CompareProducts.FirstOrDefaultAsync(u => u.ProductId == product.Id && u.User.Id == userId);
             if (existingComparation != null)

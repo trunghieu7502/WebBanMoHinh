@@ -75,9 +75,10 @@
                     {
                         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                         var IsFavorite = Model.FavoriteProducts?.Any(u => u.ProductId == Model.Id && u.UserID == userId) ?? false;
-                            if(!IsFavorite)
+                        var returnUrl = Context.Request.Path.ToString();
+                        if(!IsFavorite)
                             {
-                            <a asp-controller="Products" asp-action="AddToFavorites" asp-route-Id="@Model.Id" class="me-2">
+                            <a asp-controller="Products" asp-action="AddToFavorites" asp-route-Id="@Model.Id" asp-route-returnUrl="@returnUrl" class="me-2">
                                     <button class="btn btn-outline-danger flex-shrink-0" type="button">
                                         <i class="bi-heart me-1"></i>Yêu Thích
                                     </button>
@@ -85,7 +86,7 @@
                             }
                             else
                             {
-                            <a asp-controller="Products" asp-action="RemoveFromFavorites" asp-route-Id="@Model.Id" class="me-2">
+                            <a asp-controller="Products" asp-action="RemoveFromFavorites" asp-route-Id="@Model.Id" asp-route-returnUrl="@returnUrl" class="me-2">
                                     <button class="btn btn-danger flex-shrink-0" type="button">
                                         <i class="bi-heart-fill me-1"></i>Bỏ Yêu Thích
                                     </button>
