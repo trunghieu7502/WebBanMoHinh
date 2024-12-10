@@ -11,13 +11,13 @@
 <p><strong>Địa chỉ giao hàng:</strong> @Model.ShippingAddress, @Model.Ward, @Model.District, @Model.City</p>
 <p><strong>Phương thức thanh toán:</strong> @Model.PaymentMethod</p>
 <p><strong>Tổng giá trị:</strong> @String.Format("{0:0,0}", @Model.TotalPrice) VNĐ</p>
-<a href="@Url.Action("Index", "Products")" class="btn btn-primary">Trờ Về</a>
 
-@* <h3>Chi tiết đơn hàng</h3>
+<h3>Chi tiết đơn hàng</h3>
 <table class="table">
     <thead>
         <tr>
             <th>Tên sản phẩm</th>
+            <th>Ảnh</th>
             <th>Số lượng</th>
             <th>Giá</th>
             <th>Tổng giá</th>
@@ -28,6 +28,7 @@
         {
             <tr>
                 <td>@item.Product.Name</td>
+                <td><img src="@item.Product.ImageUrl" width="100px" height="100px" alt="@Html.DisplayFor(modelItem => item.Product.Name)"></td>
                 <td>@item.Quantity</td>
                 <td>@String.Format("{0:0,0}", item.Price) VNĐ</td>
                 <td>@String.Format("{0:0,0}", item.Quantity * item.Price) VNĐ</td>
@@ -35,4 +36,5 @@
         }
     </tbody>
 </table>
- *@
+<br />
+<a href="@Url.Action("Index", "Products")" class="btn btn-primary">Trờ Về</a>

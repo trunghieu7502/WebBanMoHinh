@@ -1,8 +1,10 @@
 ﻿@model IEnumerable<DoAnCoSo_WebBanMoHinh.Models.Product>
+@using System.Security.Claims
 
 @{
     ViewData["Title"] = "Trang Chủ";
     int quantity = 1;
+    var returnUrl = Context.Request.Path.ToString();
 }
 
 <div id="BannerCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
@@ -46,12 +48,11 @@
                     <a asp-action="Details" asp-route-id="@item.Id">
                         <img src="@item.ImageUrl" class="card-img-top" alt="...">
                     </a>
-                    <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-Id="@item.Id" asp-route-quantity="@quantity"
-                       class="position-absolute">
+                    <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-Id="@item.Id" asp-route-quantity="@quantity" class="position-absolute">
                         <div>
                             <i class="bi bi-cart-plus"></i>
                         </div>
-                    </a>
+                    </a>                   
                     <div class="card-body">
                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
                         <div class="d-flex justify-content-center align-items-center">

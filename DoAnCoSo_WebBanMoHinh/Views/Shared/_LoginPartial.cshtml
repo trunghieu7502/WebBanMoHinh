@@ -17,6 +17,7 @@
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
         @if (SignInManager.IsSignedIn(User))
         {
+            <li><a href="/Products/Comparation" class="dropdown-item">So sánh sản phẩm</a></li>
             <li><a id="manage" class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Thông tin tài khoản</a></li>
             if (User.IsInRole(WebRoles.Role_Admin))
             {

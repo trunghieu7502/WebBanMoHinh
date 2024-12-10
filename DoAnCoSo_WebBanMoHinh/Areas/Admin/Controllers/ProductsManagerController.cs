@@ -154,6 +154,11 @@ namespace DoAnCoSo_WebBanMoHinh.Areas.Admin.Controllers
                     }
                 }
                 await _productRepository.UpdateAsync(product);
+                if (product.Stock == 0)
+                {
+                    product.Status = false;
+                    await _productRepository.UpdateAsync(product);
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(product);

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<ApplicationUser>
+
+@{
+    ViewData["Title"] = "Người Dùng";
+}
+
+<h1 class="text-center mt-4">DANH SÁCH NGƯỜI DÙNG</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Địa Chỉ</th>
+            <th>Số Điện Thoại</th>
+            <th>Tình trạng khóa</th>
+            <th>Hành Động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>@user.Address</td>
+                <td>@user.PhoneNumber</td>
+                <td>@(user.LockoutEnd.HasValue ? "Khóa tới " + user.LockoutEnd.Value.ToString("f") : "Không")</td>
+                <td>
+                    <form method="post" asp-area="Admin" asp-controller="UsersManager" asp-action="RoleChange" asp-route-userId="@user.Id">
+                        <select name="role">
+                            <option value="@WebRoles.Role_Customer">Customer</option>
+                            <option value="@WebRoles.Role_Admin">Admin</option>
+                        </select>
+                        <button type="submit">Đổi chức vụ</button>
+                    </form>
+                    <form method="post" asp-area="Admin" asp-controller="UsersManager" asp-action="Lockout" asp-route-userId="@user.Id">
+                        <input type="text" name="lockoutDuration" placeholder="Thời hạn (theo giờ)" />
+                        <button type="submit">Khóa</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

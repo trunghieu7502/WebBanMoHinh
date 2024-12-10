@@ -5,8 +5,11 @@
     string pname = Model.Name;
     ViewData["Title"] = $"{pname}";
     var Images = ViewBag.Images;
+    int quantity = 1;
     var FavoriteProducts = ViewBag.FavoriteProducts;
     var CompareProducts = ViewBag.CompareProducts;
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var returnUrl = Context.Request.Path.ToString();
 }
 
 <nav aria-label="breadcrumb">
@@ -64,7 +67,7 @@
                     }
                     else
                     {
-                        <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-Id="@Model.Id" class="me-2">
+                        <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-Id="@Model.Id" asp-route-quantity="@quantity" class="me-2">
                             <button class="btn btn-outline-dark flex-shrink-0" type="button">
                                 <i class="bi-cart-fill me-1"></i>Thêm Vào Giỏ
                             </button>
@@ -73,9 +76,7 @@
                     
                     @if (User.Identity.IsAuthenticated)
                     {
-                        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                         var IsFavorite = Model.FavoriteProducts?.Any(u => u.ProductId == Model.Id && u.UserID == userId) ?? false;
-                        var returnUrl = Context.Request.Path.ToString();
                         if(!IsFavorite)
                             {
                             <a asp-controller="Products" asp-action="AddToFavorites" asp-route-Id="@Model.Id" asp-route-returnUrl="@returnUrl" class="me-2">
@@ -103,7 +104,6 @@
                     }
                     @if (User.Identity.IsAuthenticated)
                     {
-                        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                         var Compared = Model.CompareProducts?.Any(u => u.ProductId == Model.Id && u.UserID == userId) ?? false;
                         if (!Compared)
                         {

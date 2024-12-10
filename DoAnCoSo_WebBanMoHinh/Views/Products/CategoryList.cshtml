@@ -4,6 +4,7 @@
     string pname = Model.CateName;
     ViewData["Title"] = $"{pname}";
     int quantity = 1;
+    var returnUrl = Context.Request.Path.ToString();
 }
 
 <nav aria-label="breadcrumb">
