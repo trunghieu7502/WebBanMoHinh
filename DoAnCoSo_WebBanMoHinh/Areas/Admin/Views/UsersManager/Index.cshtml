@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ApplicationUser>
+﻿@model IEnumerable<DoAnCoSo_WebBanMoHinh.Areas.Admin.Models.UserRole>
 
 @{
     ViewData["Title"] = "Người Dùng";
@@ -12,28 +12,30 @@
             <th>Email</th>
             <th>Địa Chỉ</th>
             <th>Số Điện Thoại</th>
+            <th>Chức vụ</th>
             <th>Tình trạng khóa</th>
             <th>Hành Động</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var user in Model)
+        @foreach (var userRole in Model)
         {
             <tr>
-                <td>@user.Email</td>
-                <td>@user.Address</td>
-                <td>@user.PhoneNumber</td>
-                <td>@(user.LockoutEnd.HasValue ? "Khóa tới " + user.LockoutEnd.Value.ToString("f") : "Không")</td>
+                <td>@userRole.User.Email</td>
+                <td>@userRole.User.Address</td>
+                <td>@userRole.User.PhoneNumber</td>
+                <td><span>@userRole.Role</span></td>
+                <td>@(userRole.User.LockoutEnd.HasValue ? "Khóa tới " + userRole.User.LockoutEnd.Value.ToString("f") : "Không")</td>
                 <td>
-                    <form method="post" asp-area="Admin" asp-controller="UsersManager" asp-action="RoleChange" asp-route-userId="@user.Id">
+                    <form method="post" asp-area="Admin" asp-controller="UsersManager" asp-action="RoleChange" asp-route-userId="@userRole.User.Id">
                         <select name="role">
                             <option value="@WebRoles.Role_Customer">Customer</option>
                             <option value="@WebRoles.Role_Admin">Admin</option>
                         </select>
                         <button type="submit">Đổi chức vụ</button>
                     </form>
-                    <form method="post" asp-area="Admin" asp-controller="UsersManager" asp-action="Lockout" asp-route-userId="@user.Id">
-                        <input type="text" name="lockoutDuration" placeholder="Thời hạn (theo giờ)" />
+                    <form method="post" asp-area="Admin" asp-controller="UsersManager" asp-action="Lockout" asp-route-userId="@userRole.User.Id">
+                        <input type="text" name="lockoutDuration" placeholder="Thời hạn (theo ngày)" />
                         <button type="submit">Khóa</button>
                     </form>
                 </td>

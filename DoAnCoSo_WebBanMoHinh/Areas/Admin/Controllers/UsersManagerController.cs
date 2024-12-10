@@ -1,4 +1,5 @@
-﻿using DoAnCoSo_WebBanMoHinh.Models;
+﻿using DoAnCoSo_WebBanMoHinh.Areas.Admin.Models;
+using DoAnCoSo_WebBanMoHinh.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,19 +11,31 @@ namespace DoAnCoSo_WebBanMoHinh.Areas.Admin.Controllers
     [Authorize(Roles = WebRoles.Role_Admin)]
     public class UsersManagerController : Controller
     {
-        private readonly ApplicationDbContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
-        public UsersManagerController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public UsersManagerController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
         }
-        public async Task<IActionResult> IndexAsync()
+        public async Task<IActionResult> Index()
         {
             var users = await _userManager.Users.ToListAsync();
-            return View(users);
+            var usersWithRoles = new List<UserRole>();
+
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                var userRole = roles.FirstOrDefault();
+
+                usersWithRoles.Add(new UserRole
+                {
+                    User = user,
+                    Role = userRole
+                });
+            }
+
+            return View(usersWithRoles);
         }
 
         [HttpPost]
