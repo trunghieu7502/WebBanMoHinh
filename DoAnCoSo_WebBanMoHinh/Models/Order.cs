@@ -18,5 +18,7 @@ namespace DoAnCoSo_WebBanMoHinh.Models
         public bool IsDone {  get; set; }
         public ApplicationUser User { get; set; }
         public List<OrderDetail> OrderDetails { get; set; }
+        public List<Coupons> Coupons { get; set; }
+        public decimal DiscountAmount { get; set; }
     }
 }

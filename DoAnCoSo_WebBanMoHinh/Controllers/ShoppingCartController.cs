@@ -58,6 +58,19 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
         public ActionResult Index()
         {
             var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new ShoppingCart();
+            if (!cart.Items.Any())
+            {
+                ViewData["DiscountAmount"] = 0;
+                ViewData["CouponCode"] = null;
+            }
+            else
+            {
+                var discountAmount = HttpContext.Session.GetObjectFromJson<decimal?>("DiscountAmount") ?? 0;
+                var couponCode = HttpContext.Session.GetObjectFromJson<string>("CouponCode");
+                ViewData["DiscountAmount"] = Convert.ToDecimal(discountAmount);
+                ViewData["CouponCode"] = couponCode;
+            }
+
             return View(cart);
         }
 
@@ -67,7 +80,6 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             if (cart is not null)
             {
                 cart.RemoveItem(Id);
-                // Lưu lại giỏ hàng vào Session sau khi đã xóa mục
                 HttpContext.Session.SetObjectAsJson("Cart", cart);
             }
             return RedirectToAction("Index");
@@ -91,10 +103,14 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             {
                 return RedirectToAction("Index", "Products");
             }
+            var discountAmount = HttpContext.Session.GetObjectFromJson<decimal?>("DiscountAmount") ?? 0;
+            var couponCode = HttpContext.Session.GetObjectFromJson<string>("CouponCode");
             var model = new CheckoutVM
             {
                 User = user,
-                Cart = cart
+                Cart = cart,
+                DiscountAmount = discountAmount,
+                CouponCode = couponCode
             };
             return View(model);
         }
@@ -108,10 +124,19 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             {
                 return RedirectToAction("Index");
             }
+            var discountAmount = HttpContext.Session.GetObjectFromJson<decimal?>("DiscountAmount") ?? 0;
+            var couponCode = HttpContext.Session.GetObjectFromJson<string>("CouponCode");
+            var totalPriceAfterDiscount = cart.Items.Sum(i => i.Price * i.Quantity) - discountAmount;
+            if (totalPriceAfterDiscount < 0)
+            {
+                TempData["ErrorMessage"] = "Tổng tiền không hợp lệ sau khi áp dụng mã giảm giá.";
+                return RedirectToAction("Index");
+            }
             order.UserId = user.Id;
             order.UserName = user.UserName;
             order.OrderDate = DateTime.UtcNow;
-            order.TotalPrice = cart.Items.Sum(i => i.Price * i.Quantity);
+            order.TotalPrice = totalPriceAfterDiscount;
+            order.DiscountAmount = discountAmount;
             order.IsDone = false;
             order.ShippingAddress = model.Address;
             order.City = model.City;
@@ -125,6 +150,16 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
                 Quantity = i.Quantity,
                 Price = i.Price
             }).ToList();
+            if (!string.IsNullOrEmpty(couponCode))
+            {
+                var coupon = await _context.Coupons.FirstOrDefaultAsync(c => c.Code == couponCode);
+                if (coupon != null)
+                {
+                    coupon.RedeemedBy = user.Id;
+                    _context.Coupons.Update(coupon);
+                    await _context.SaveChangesAsync();
+                }
+            }
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
             foreach (var item in cart.Items)
@@ -147,19 +182,58 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
                 _context.Update(product);
             }
             await _context.SaveChangesAsync();
-            HttpContext.Session.Remove("Cart");
+            int rewardPoints = 0;
+            if (totalPriceAfterDiscount >= 1000000 && totalPriceAfterDiscount < 3000000)
+            {
+                rewardPoints = 10;
+            }
+            else if (totalPriceAfterDiscount >= 3000000 && totalPriceAfterDiscount < 5000000)
+            {
+                rewardPoints = 40;
+            }
+            else if (totalPriceAfterDiscount >= 5000000 && totalPriceAfterDiscount < 10000000)
+            {
+                rewardPoints = 65;
+            }
+            else if (totalPriceAfterDiscount >= 10000000 && totalPriceAfterDiscount < 20000000)
+            {
+                rewardPoints = 140;
+            }
+            else if (totalPriceAfterDiscount >= 20000000 && totalPriceAfterDiscount < 50000000)
+            {
+                rewardPoints = 300;
+            }
+            else if (totalPriceAfterDiscount >= 50000000 && totalPriceAfterDiscount < 100000000)
+            {
+                rewardPoints = 900;
+            }
+            else if (totalPriceAfterDiscount >= 100000000)
+            {
+                rewardPoints = 2500 + (int)((totalPriceAfterDiscount - 100000000) / 1000000) * 25;
+            }
+            user.Points += rewardPoints;
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
             if (model.PaymentMethod == "VNPAY")
             {
                 var vnPayModel = new VNPayRequestModel
                 {
-                    Amount = (double)cart.Items.Sum(p => p.Price * p.Quantity),
+                    Amount = (double)totalPriceAfterDiscount,
                     CreatedDate = DateTime.Now,
                     Description = "Đơn hàng thành công",
                     FullName = user.UserName,
                     OrderId = new Random().Next(100, 1000)
                 };
+
+                HttpContext.Session.Remove("Cart");
+                HttpContext.Session.Remove("DiscountAmount");
+                HttpContext.Session.Remove("CouponCode");
                 return Redirect(_vnPayService.CreatePaymentUrl(HttpContext, vnPayModel));
             }
+            HttpContext.Session.Remove("Cart");
+            HttpContext.Session.Remove("DiscountAmount");
+            HttpContext.Session.Remove("CouponCode");
+            TempData["SuccessMessage"] = $"Đơn hàng hoàn tất! Bạn đã được cộng {rewardPoints} điểm.";
             return View("OrderCompleted", order);
         }
 

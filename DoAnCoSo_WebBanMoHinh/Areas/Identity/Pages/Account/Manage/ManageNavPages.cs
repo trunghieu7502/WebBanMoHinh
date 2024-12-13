@@ -119,5 +119,10 @@ namespace  DoAnCoSo_WebBanMoHinh.Areas.Identity.Pages.Account.Manage
                 ?? System.IO.Path.GetFileNameWithoutExtension(viewContext.ActionDescriptor.DisplayName);
             return string.Equals(activePage, page, StringComparison.OrdinalIgnoreCase) ? "active" : null;
         }
+        public static string CustomNavClass(ViewContext viewContext)
+        {
+            var activePage = viewContext.ViewData["ActivePage"] as string;
+            return string.Equals(activePage, "ShopCoupon", StringComparison.OrdinalIgnoreCase) ? "active" : null;
+        }
     }
 }

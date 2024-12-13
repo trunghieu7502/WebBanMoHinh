@@ -22,9 +22,12 @@ namespace DoAnCoSo_WebBanMoHinh.Areas.Admin.Controllers
         // GET: Admin/CartsManagerController
         public async Task<IActionResult> Index()
         {
-            return _context.Orders != null ?
-                        View(await _context.Orders.ToListAsync()) :
-                        Problem("Entity set 'ApplicationDbContext.Orders'  is null.");
+            var orders = await _context.Orders
+             .Include(o => o.Coupons)
+             .ToListAsync();
+
+            return View(orders);
+
         }
 
         // GET: CartsManagerController/Details/5

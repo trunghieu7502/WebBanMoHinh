@@ -1,0 +1,89 @@
+﻿@model IEnumerable<dynamic>
+
+<div class="container mt-4">
+    <h2>Shop Coupon</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
+    <p>Điểm hiện tại: <strong>@ViewData["UserPoints"]</strong></p>
+
+    <h4>Danh sách coupon</h4>
+    @if (ViewData["NoCoupons"] != null)
+    {
+        <div class="alert alert-warning">@ViewData["NoCoupons"]</div>
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Giảm Giá</th>
+                    <th>Điểm Yêu Cầu</th>
+                    <th>Hạn Sử Dụng</th>
+                    <th>Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var coupon in Model)
+                {
+                    <tr>
+                        <td>@coupon.CouponId</td>
+                        <td>@coupon.DiscountAmount</td>
+                        <td>@coupon.PointsRequired</td>
+                        <td>@coupon.ExpirationDate.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <form asp-action="RedeemCoupon" method="post">
+                                <input type="hidden" name="couponId" value="@coupon.CouponId" />
+                                <button type="submit" class="btn btn-success">Đổi Coupon</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <h4 class="mt-4">Danh sách coupon đã đổi</h4>
+    @if (ViewData["RedeemedCoupons"] != null && ViewData["RedeemedCoupons"] is IEnumerable<dynamic> redeemedCoupons && redeemedCoupons.Any())
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Mã Coupon</th>
+                    <th>Giảm Giá</th>
+                    <th>Ngày Đổi</th>
+                    <th>Ngày Hết Hạn</th>
+                    <th>Điểm Sử Dụng</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var redeemedCoupon in redeemedCoupons)
+                {
+                    <tr>
+                        <td>@redeemedCoupon.CouponId</td>
+                        <td>@redeemedCoupon.Code</td>
+                        <td>@redeemedCoupon.DiscountAmount</td>
+                        <td>@redeemedCoupon.RedeemedDate.ToString("dd/MM/yyyy")</td>
+                        <td>@redeemedCoupon.ExpirationDate.ToString("dd/MM/yyyy")</td>
+                        <td>@redeemedCoupon.PointsUsed</td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info">Bạn chưa đổi coupon nào.</div>
+    }
+</div>

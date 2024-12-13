@@ -1,0 +1,27 @@
+﻿@model DoAnCoSo_WebBanMoHinh.Models.Coupons
+
+@{
+    ViewData["Title"] = "Tạo Coupon";
+}
+
+<h2>Tạo Coupon Mới</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label for="Code">Mã Coupon</label>
+        <input type="text" class="form-control" id="Code" name="Code" required />
+    </div>
+    <div class="form-group">
+        <label for="DiscountAmount">Số Tiền Giảm Giá</label>
+        <input type="number" class="form-control" id="DiscountAmount" name="DiscountAmount" required />
+    </div>
+    <div class="form-group">
+        <label for="PointsRequired">Điểm Yêu Cầu</label>
+        <input type="number" class="form-control" id="PointsRequired" name="PointsRequired" required />
+    </div>
+    <div class="form-group">
+        <label for="ExpirationDate">Hạn Sử Dụng</label>
+        <input type="date" class="form-control" id="ExpirationDate" name="ExpirationDate" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Tạo Coupon</button>
+</form>

@@ -8,5 +8,7 @@ namespace DoAnCoSo_WebBanMoHinh.Models
         [Required]
         public string FullName { get; set; }
         public string? Address { get; set; }
+        public int Points { get; set; } = 0;
+        public ICollection<Coupons> RedeemedCoupons { get; set; }
     }
 }

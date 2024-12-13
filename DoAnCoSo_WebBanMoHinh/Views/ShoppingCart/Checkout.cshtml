@@ -2,6 +2,8 @@
 @model CheckoutVM
 @{
     ViewData["Title"] = "Xác Nhận Đơn Hàng";
+    var discountAmount = ViewData["DiscountAmount"] as decimal? ?? 0;
+    var totalAfterDiscount = Model.Cart.Items.Sum(i => i.Quantity * i.Price) - discountAmount;
 }
 
 <h1 class="text-center mb-4">XÁC NHẬN ĐƠN HÀNG</h1>
@@ -85,8 +87,12 @@
                         }
                     </tbody>
                 </table>
+                <div>
+                    <p>Mã giảm giá: <strong>@Model.CouponCode</strong></p>
+                    <p>Giảm giá: <strong>@String.Format("{0:0,0} VNĐ", Model.DiscountAmount)</strong></p>
+                </div>
                 <h4 class="text-end">
-                    Tổng cộng: @String.Format("{0:0,0}", Model.Cart.Items.Sum(i => i.Quantity * i.Price)) VNĐ
+                    Tổng cộng: @String.Format("{0:0,0}", Model.Cart.Items.Sum(i => i.Quantity * i.Price) - Model.DiscountAmount) VNĐ
                 </h4>
             </div>
         </div>

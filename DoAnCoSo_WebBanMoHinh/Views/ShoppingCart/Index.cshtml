@@ -1,5 +1,4 @@
 ﻿@using Microsoft.AspNetCore.Identity;
-
 @model ShoppingCart 
 @inject SignInManager<ApplicationUser> SignInManager
  
@@ -60,12 +59,39 @@ else
                     </tbody>
                 </table>
                 <hr />
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <a asp-action="Checkout" asp-route-Id="model.Id" class="btn btn-success me-3">Đặt Hàng</a>
-                        <a asp-controller="Products" asp-action="Index" class="btn btn-primary">Trở Về</a>
+                <div class="d-flex flex-column align-items-end">
+                    <form asp-action="ApplyCoupon" method="post" class="mb-3 d-flex">
+                        <input type="text" class="form-control me-2" name="CouponCode" placeholder="Nhập mã giảm giá" />
+                        <button type="submit" class="btn btn-info">Áp dụng</button>
+                    </form>
+                    @if (TempData["DiscountMessage"] != null)
+                    {
+                        <div class="alert alert-success w-100">
+                            @TempData["DiscountMessage"]
+                        </div>
+                    }
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger w-100">
+                            @TempData["ErrorMessage"]
+                        </div>
+                    }
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <div>
+                            <a asp-action="Checkout" asp-route-Id="model.Id" class="btn btn-success me-3">Đặt Hàng</a>
+                            <a asp-controller="Products" asp-action="Index" class="btn btn-primary">Trở Về</a>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex flex-column align-items-end">
+                                @if (!string.IsNullOrEmpty(ViewData["CouponCode"]?.ToString()))
+                                {
+                                    <p>Mã giảm giá: <strong>@ViewData["CouponCode"]</strong></p>
+                                    <p>Giảm giá: <strong>@String.Format("{0:0,0} VNĐ", ViewData["DiscountAmount"])</strong></p>
+                                }
+                                <h4 class="mb-0">Tổng cộng: @String.Format("{0:0,0} VNĐ", Model.Items.Sum(i => i.Quantity * i.Price) - Convert.ToDecimal(ViewData["DiscountAmount"] ?? 0)) VNĐ</h4>
+                            </div>
+                        </div>
                     </div>
-                    <h4 class="mb-0">Tổng cộng: @String.Format("{0:0,0}", Model.Items.Sum(i => i.Quantity * i.Price)) VNĐ</h4>
                 </div>
             </div>
         </div>

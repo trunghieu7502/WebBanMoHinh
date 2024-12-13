@@ -1,0 +1,51 @@
+﻿@model IEnumerable<dynamic>
+
+<div class="container mt-4">
+    <h2>Quản Lý Coupon</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Mã Coupon</th>
+                <th>Số Tiền Giảm</th>
+                <th>Điểm Cần Đổi</th>
+                <th>Ngày Hết Hạn</th>
+                <th>Người Đổi</th>
+                <th>ID Người Đổi</th>
+                <th>Đơn Hàng</th>
+                <th>Hành Động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var coupon in Model)
+            {
+                <tr>
+                    <td>@coupon.CouponId</td>
+                    <td>@coupon.Code</td>
+                    <td>@coupon.DiscountAmount</td>
+                    <td>@coupon.PointsRequired</td>
+                    <td>@coupon.ExpirationDate.ToString("dd/MM/yyyy")</td>
+                    <td>@coupon.RedeemedBy</td>
+                    <td>@coupon.RedeemedById</td>
+                    <td>@coupon.OrderId</td>
+                    <td>
+                        <form asp-action="Delete" method="post">
+                            <input type="hidden" name="id" value="@coupon.CouponId" />
+                            <button type="submit" class="btn btn-danger">Xóa</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

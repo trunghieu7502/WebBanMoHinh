@@ -10,4 +10,6 @@ public class CheckoutVM
     public string Ward { get; set; }
     public string PaymentMethod { get; set; }
     public string Notes { get; set; }
+    public decimal DiscountAmount { get; set; }
+    public string CouponCode { get; set; }
 }

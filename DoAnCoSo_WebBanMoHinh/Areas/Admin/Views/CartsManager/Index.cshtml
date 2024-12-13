@@ -22,6 +22,9 @@
                 Địa Chỉ
             </th>
             <th>
+                Mã Coupon
+            </th>
+            <th>
                 Thành Phố
             </th>
             <th>
@@ -56,6 +59,16 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ShippingAddress)
+            </td>
+            <td>
+                @if (item.Coupons != null && item.Coupons.Any())
+                {
+                    @item.Coupons.FirstOrDefault()?.Code
+                }
+                else
+                {
+                    <span>Không sử dụng</span>
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.City)
