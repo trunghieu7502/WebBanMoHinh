@@ -192,6 +192,10 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             {
                 return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
+            if (product == null)
+            {
+                return NotFound();
+            }
             var existingComparation = await _context.CompareProducts.FirstOrDefaultAsync(u => u.ProductId == product.Id && u.User.Id == userId);
             if (existingComparation == null)
             {
@@ -204,7 +208,7 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
                 _context.CompareProducts.Add(compareProduct);
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction("Comparation", "Products");
+            return RedirectToAction("Comparation");
         }
 
         public async Task<IActionResult> RemoveFromCompares(int id)
@@ -222,6 +226,30 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction("Comparation", "Products");
+        }
+
+        public async Task<IActionResult> GetAvailableProducts()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var comparedProductIds = await _context.CompareProducts
+                .Where(cp => cp.UserID == userId)
+                .Select(cp => cp.ProductId)
+                .ToListAsync();
+            var products = await _context.Products
+                .Where(p => !comparedProductIds.Contains(p.Id))
+                .ToListAsync();
+            var htmlString = "";
+            foreach (var product in products)
+            {
+                htmlString += $"<div class='product-item' style='margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;'>" +
+                              $"<span class='d-inline'>{product.Name}</span> " +
+                              $"<div style='margin-left: auto; display: flex; align-items: center;'>" +
+                              $"<span class='d-inline'>{product.Price.ToString("#,##0")} VNĐ</span> " +
+                              $"<button class='btn btn-success btn-sm d-inline ms-3' onclick='addToComparison({product.Id})'>Thêm</button>" +
+                              "</div>" +
+                              "</div>";
+            }
+            return Content(htmlString);
         }
     }
 }
