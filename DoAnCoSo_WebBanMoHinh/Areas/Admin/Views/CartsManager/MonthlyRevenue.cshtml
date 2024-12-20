@@ -1,0 +1,104 @@
+﻿@model dynamic
+
+@{
+    ViewData["Title"] = "Doanh Thu Hàng Tháng";
+}
+
+<div class="container mt-4">
+    <h1 class="text-center">Doanh Thu Hàng Tháng</h1>
+    <hr class="mb-4" />
+
+    <div class="row mb-4">
+        <!-- Tổng quan doanh thu -->
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">Doanh Thu Tháng Hiện Tại</div>
+                <div class="card-body">
+                    <h5 class="card-title">@Model.CurrentMonthRevenue.ToString("#,##0 VNĐ")</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-white bg-secondary mb-3">
+                <div class="card-header">Doanh Thu Tháng Trước</div>
+                <div class="card-body">
+                    <h5 class="card-title">@Model.LastMonthRevenue.ToString("#,##0 VNĐ")</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-white @((Model.PercentageChange >= 0) ? "bg-success" : "bg-danger") mb-3">
+                <div class="card-header">Thay Đổi Lợi Nhuận</div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        @if (Model.PercentageChange >= 0)
+                        {
+                            <span>+@Model.PercentageChange.ToString("0.00")%</span>
+                        }
+                        else
+                        {
+                            <span>@Model.PercentageChange.ToString("0.00")%</span>
+                        }
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Biểu đồ -->
+    <div class="row">
+        <div class="col-md-12">
+            <canvas id="revenueChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('revenueChart').getContext('2d');
+        var revenueChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Tháng Trước', 'Tháng Hiện Tại'],
+                datasets: [{
+                    label: 'Doanh Thu (VNĐ)',
+                    data: [
+        @Model.LastMonthRevenue,
+        @Model.CurrentMonthRevenue
+                    ],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)', // Màu cho tháng trước
+                        'rgba(54, 162, 235, 0.6)'  // Màu cho tháng hiện tại
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString() + ' VNĐ';
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                }
+            }
+        });
+    </script>
+}

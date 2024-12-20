@@ -86,17 +86,71 @@
                 @Html.DisplayFor(modelItem => item.Notes)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsDone)
+                    <input type="checkbox" class="is-done-checkbox" data-id="@item.Id" @if (item.IsDone)
+                    {
+                        <text>checked</text>
+                    }>
             </td>
             <td>
                     <a asp-area="Admin" asp-controller="CartsManager" asp-action="Details" asp-route-id="@item.Id">
                         <button class="btn btn-primary">Chi Tiết</button>
-                    </a>
-                    <a asp-area="Admin" asp-controller="CartsManager" asp-action="Edit" asp-route-id="@item.Id">
-                        <button class="btn btn-warning">Sửa</button>
                     </a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+<div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="statusModalLabel">Thông Báo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Message goes here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.is-done-checkbox').forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+            var orderId = checkbox.getAttribute('data-id');
+            var isDone = checkbox.checked;
+            fetch('@Url.Action("UpdateIsDone", "CartsManager")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                body: JSON.stringify({ id: orderId, isDone: isDone })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showModal('Cập nhật trạng thái thành công.');
+                    } else {
+                        alert('Error updating status');
+                        checkbox.checked = !isDone;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred');
+                    checkbox.checked = !isDone;
+                });
+        });
+    });
+
+    function showModal(message) {
+        var modalBody = document.getElementById('modalBody');
+        modalBody.textContent = message;
+        $('#statusModal').modal('show');  // Show the modal
+    }
+</script>

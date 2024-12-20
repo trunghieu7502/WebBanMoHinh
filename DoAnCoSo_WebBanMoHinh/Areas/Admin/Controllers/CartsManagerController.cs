@@ -49,60 +49,56 @@ namespace DoAnCoSo_WebBanMoHinh.Areas.Admin.Controllers
             return View(order);
         }
 
-        // GET: CartsManagerController/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Orders == null)
-            {
-                return NotFound();
-            }
-
-            var order = await _context.Orders.FindAsync(id);
-            if (order == null)
-            {
-                return NotFound();
-            }
-            var users = await _context.Users.ToListAsync();
-            ViewBag.UserId = new SelectList(users, "Id", "UserName", order.UserId);
-            return View(order);
-        }
-
-        // POST: CartsManagerController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId")] Order order)
-        {
-            if (id != order.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(order);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!OrderExists(order.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(order);
-        }
-
         private bool OrderExists(int id)
         {
             return (_context.Orders?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+        public async Task<IActionResult> MonthlyRevenue()
+        {
+            var now = DateTime.Now;
+            var currentMonthRevenue = await _context.Orders
+                .Where(o => o.OrderDate.Month == now.Month && o.OrderDate.Year == now.Year)
+                .SumAsync(o => o.TotalPrice);
+            var lastMonth = now.AddMonths(-1);
+            var lastMonthRevenue = await _context.Orders
+                .Where(o => o.OrderDate.Month == lastMonth.Month && o.OrderDate.Year == lastMonth.Year)
+                .SumAsync(o => o.TotalPrice);
+            decimal percentageChange = 0;
+            if (lastMonthRevenue > 0)
+            {
+                percentageChange = ((currentMonthRevenue - lastMonthRevenue) / lastMonthRevenue) * 100;
+            }
+            else if (currentMonthRevenue > 0)
+            {
+                percentageChange = 100;
+            }
+            var result = new
+            {
+                CurrentMonthRevenue = currentMonthRevenue,
+                LastMonthRevenue = lastMonthRevenue,
+                PercentageChange = percentageChange
+            };
+            return View(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateIsDone([FromBody] UpdateIsDoneModel model)
+        {
+            var order = await _context.Orders.FindAsync(model.Id);
+            if (order == null)
+            {
+                return Json(new { success = false });
+            }
+
+            order.IsDone = model.IsDone;
+            await _context.SaveChangesAsync();
+            return Json(new { success = true });
+        }
+    }
+    public class UpdateIsDoneModel
+    {
+        public int Id { get; set; }
+        public bool IsDone { get; set; }
     }
 }

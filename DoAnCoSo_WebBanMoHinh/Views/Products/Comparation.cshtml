@@ -2,77 +2,105 @@
 
 @{
     ViewData["Title"] = "So Sánh Sản Phẩm";
+    var sortedProducts = Model.OrderBy(p => p.CategoryId).ToList();
+    var categoryGroups = sortedProducts.GroupBy(p => p.CategoryId);
 }
 
 <h1>So Sánh Sản Phẩm</h1>
-
+<hr />
 @if (!Model.Any())
 {
     <p>Không có sản phẩm nào trong danh sách so sánh.</p>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Price)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ImageUrl)
-                </th>
-                <th>
-                    Hãng
-                </th>
-                <th>
-                    Loại
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var product in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => product.Name)
-                    </td>
-                    <td>
-                        <p>@product.Price.ToString("#,##0") VNĐ</p>
-                    </td>
-                    <td>
-                        <img src="@product.ImageUrl" class="card-img-top" alt="..." style="height: 100px">
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => product.Company.CompName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => product.Category.CateName)
-                    </td>
-                    <td>
-                        <a asp-action="RemoveFromCompares" asp-controller="Products" asp-route-id="@product.Id" class="btn btn-danger me-3">
-                            <button class="btn btn-danger">Xóa</button>
-                        </a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    @foreach (var group in categoryGroups)
+    {
+        if (group.Any())
+        {
+            <h2 class="table-primary">@group.First().Category.CateName</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Price)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ImageUrl)
+                        </th>
+                        <th>
+                            Hãng
+                        </th>
+                        <th>
+                            Loại
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var cheapestProduct = group.OrderBy(p => p.Price).First();
+                        var mostExpensiveProduct = group.OrderByDescending(p => p.Price).First();
+                    }
+                    @foreach (var product in group)
+                    {
+                        var priceClass = product == cheapestProduct ? "table-success" : product == mostExpensiveProduct ? "table-danger" : "";
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => product.Name)
+                            </td>
+                            <td class="@priceClass">
+                                <p>@product.Price.ToString("#,##0") VNĐ</p>
+                            </td>
+                            <td>
+                                <img src="@product.ImageUrl" class="card-img-top" alt="..." style="height: 100px">
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => product.Company.CompName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => product.Category.CateName)
+                            </td>
+                            <td>
+                                <a asp-action="RemoveFromCompares" asp-controller="Products" asp-route-id="@product.Id" class="btn btn-danger me-3">
+                                    <button class="btn btn-danger">Xóa</button>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        <br />
+    }
 }
 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">Thêm sản phẩm</button>
 
 <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="addProductModalLabel">Chọn sản phẩm để thêm vào so sánh</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div id="productListContainer"></div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Ảnh</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Giá</th>
+                            <th>Hãng</th>
+                            <th>Loại</th>
+                            <th>Thêm</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productListContainer">
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

@@ -236,18 +236,21 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
                 .Select(cp => cp.ProductId)
                 .ToListAsync();
             var products = await _context.Products
+                .Include(p => p.Company)
+                .Include(p => p.Category)
                 .Where(p => !comparedProductIds.Contains(p.Id))
                 .ToListAsync();
             var htmlString = "";
             foreach (var product in products)
             {
-                htmlString += $"<div class='product-item' style='margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;'>" +
-                              $"<span class='d-inline'>{product.Name}</span> " +
-                              $"<div style='margin-left: auto; display: flex; align-items: center;'>" +
-                              $"<span class='d-inline'>{product.Price.ToString("#,##0")} VNĐ</span> " +
-                              $"<button class='btn btn-success btn-sm d-inline ms-3' onclick='addToComparison({product.Id})'>Thêm</button>" +
-                              "</div>" +
-                              "</div>";
+                htmlString += $"<tr>" +
+                              $"<td><img src='{product.ImageUrl}' class='img-thumbnail' alt='{product.Name}' style='height: 50px;'></td>" +
+                              $"<td>{product.Name}</td>" +
+                              $"<td>{product.Price.ToString("#,##0")} VNĐ</td>" +
+                              $"<td>{product.Company?.CompName}</td>" +
+                              $"<td>{product.Category?.CateName}</td>" +
+                              $"<td><button class='btn btn-success btn-sm' onclick='addToComparison({product.Id})'>Thêm</button></td>" +
+                              $"</tr>";
             }
             return Content(htmlString);
         }

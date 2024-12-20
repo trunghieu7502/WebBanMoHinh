@@ -266,5 +266,63 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
 
             return View("OrderCompleted", order);
         }
+
+        [HttpPost]
+        public IActionResult ApplyCoupon(string CouponCode)
+        {
+            if (string.IsNullOrEmpty(CouponCode))
+            {
+                TempData["ErrorMessage"] = "Vui lòng nhập mã giảm giá!";
+                return RedirectToAction("Index");
+            }
+            var coupon = _context.Coupons.FirstOrDefault(c => c.Code == CouponCode && c.OrderId == null);
+            if (coupon == null)
+            {
+                TempData["ErrorMessage"] = "Mã giảm giá không hợp lệ hoặc đã được sử dụng!";
+                return RedirectToAction("Index");
+            }
+            if (coupon.ExpirationDate < DateTime.Now)
+            {
+                TempData["ErrorMessage"] = "Mã giảm giá đã hết hạn!";
+                return RedirectToAction("Index");
+            }
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetObjectFromJson<string>("CouponCode")))
+            {
+                TempData["ErrorMessage"] = "Bạn đã áp dụng một mã giảm giá. Vui lòng hủy mã hiện tại trước khi áp dụng mã mới.";
+                return RedirectToAction("Index");
+            }
+            var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new ShoppingCart();
+            var orderTotal = cart.Items.Sum(i => i.Quantity * i.Price);
+            if (orderTotal < 500000)
+            {
+                TempData["ErrorMessage"] = "Đơn hàng của bạn phải trên 500.000 VNĐ để áp dụng mã giảm giá!";
+                return RedirectToAction("Index");
+            }
+            HttpContext.Session.SetObjectAsJson("DiscountAmount", coupon.DiscountAmount);
+            HttpContext.Session.SetObjectAsJson("CouponCode", coupon.Code);
+            TempData["DiscountMessage"] = $"Mã giảm giá áp dụng thành công! Bạn được giảm {coupon.DiscountAmount:#,##0} VNĐ.";
+            HttpContext.Session.SetObjectAsJson("DiscountAmount", coupon.DiscountAmount);
+            HttpContext.Session.SetObjectAsJson("CouponCode", CouponCode);
+            TempData["DiscountMessage"] = $"Đã áp dụng mã giảm giá thành công! Giảm {coupon.DiscountAmount:#,##0} VNĐ.";
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult CancelCheckout()
+        {
+            HttpContext.Session.Remove("DiscountAmount");
+            HttpContext.Session.Remove("CouponCode");
+            TempData["ErrorMessage"] = "Bạn đã hủy giao dịch. Mã giảm giá đã được khôi phục.";
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult CancelCoupon()
+        {
+            HttpContext.Session.Remove("DiscountAmount");
+            HttpContext.Session.Remove("CouponCode");
+            TempData["SuccessMessage"] = "Mã giảm giá đã được hủy thành công!";
+            return RedirectToAction("Index");
+        }
+
     }
 }

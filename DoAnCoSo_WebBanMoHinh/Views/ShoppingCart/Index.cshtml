@@ -64,6 +64,12 @@ else
                         <input type="text" class="form-control me-2" name="CouponCode" placeholder="Nhập mã giảm giá" />
                         <button type="submit" class="btn btn-info">Áp dụng</button>
                     </form>
+                    @if (!string.IsNullOrEmpty(ViewData["CouponCode"]?.ToString()))
+                    {
+                        <form asp-action="CancelCoupon" method="post" class="mb-3">
+                            <button type="submit" class="btn btn-warning">Hủy mã giảm giá</button>
+                        </form>
+                    }
                     @if (TempData["DiscountMessage"] != null)
                     {
                         <div class="alert alert-success w-100">
