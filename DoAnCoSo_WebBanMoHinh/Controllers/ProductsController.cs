@@ -29,9 +29,14 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
         // GET: Products
         public async Task<ActionResult> Index()
         {
-            var products = await _productRepository.GetAllAsync();
-            var categories = await _categoryRepository.GetAllAsync();
-            var companies = await _companyRepository.GetAllAsync();
+            var allProducts = await _context.Products.ToListAsync();
+            var randomProducts = allProducts.OrderBy(p => Guid.NewGuid()).Take(8).ToList();
+            var latestProducts = allProducts.OrderByDescending(p => p.Id).Take(4).ToList();
+            var products = await _context.Products.Include(p => p.Category).Include(p => p.Company).ToListAsync();
+            ViewBag.RandomProducts = randomProducts;
+            ViewBag.LatestProducts = latestProducts;
+            ViewBag.Categories = await _context.Categories.ToListAsync();
+            ViewBag.Companies = await _context.Companies.ToListAsync();
             return View(products);
         }
 
@@ -47,6 +52,14 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             {
                 ViewBag.Images = product.Images;
             }
+            var relatedProducts = await _context.Products
+                .Where(p => (p.CompanyId == product.CompanyId || p.CategoryId == product.CategoryId) && p.Id != product.Id)
+                .ToListAsync();
+            var suggestedProducts = relatedProducts
+                .OrderBy(p => Guid.NewGuid()) // Random
+                .Take(4)
+                .ToList();
+            ViewBag.SuggestedProducts = suggestedProducts;
             ViewBag.FavoriteProducts = product.FavoriteProducts;
             ViewBag.CompareProducts = product.CompareProducts;
             return View(product);
@@ -253,6 +266,17 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
                               $"</tr>";
             }
             return Content(htmlString);
+        }
+
+        public async Task<IActionResult> GetCategoriesAndCompanies()
+        {
+            var categories = await _context.Categories.ToListAsync();
+            var companies = await _context.Companies.ToListAsync();
+
+            ViewBag.Categories = categories;
+            ViewBag.Companies = companies;
+
+            return PartialView("_DropdownPartial");
         }
     }
 }

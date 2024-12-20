@@ -11,7 +11,7 @@
     <script type="text/javascript" src="https://cdn.fchat.vn/assets/embed/webchat.js?id=6646e576c507a46b5467cc45" async="async"></script>
 </head>
 <body>
-    <header>
+    <header class="sticky-header">
         <div class="text-center border-bottom" style="background:#327da8">
             <div class="container">
                 <div class="row">
@@ -54,32 +54,45 @@
                             <span class="nav-text">Trang Chủ</span>
                         </a>
                     </li>
-                    <li class="nav-item me-2 me-lg-0 d-none d-md-inline-block">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-box"></i>
-                            <span class="nav-text">Sản Phẩm</span>
+                    <li class="nav-item dropdown me-2 me-lg-0">
+                        <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-box"></i> Sản Phẩm
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
                             <li><a class="dropdown-item" href="/products/ProductList">Toàn bộ sản phẩm</a></li>
-                            <li><a class="dropdown-item" href="/products/CategoryList/1">Mô hình lắp ráp</a></li>
-                            <li><a class="dropdown-item" href="/products/CategoryList/2">Mô hình tĩnh</a></li>
-                            <li><a class="dropdown-item" href="/products/CategoryList/3">Mô hình hành động</a></li>
+                            @if (ViewBag.Categories != null)
+                            {
+                                @foreach (var category in ViewBag.Categories)
+                                {
+                                    <li><a class="dropdown-item" href="/products/CategoryList/@category.Id">@category.CateName</a></li>
+                                }
+                            }
+                            else
+                            {
+                                <li><a class="dropdown-item" href="#">Không có dữ liệu</a></li>
+                            }
                         </ul>
                     </li>
-                    <li class="nav-item dropdown me-2 me-lg-0 d-none d-md-inline-block">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-building"></i>
-                            <span class="nav-text">Hãng</span>
+                    <li class="nav-item dropdown me-2 me-lg-0">
+                        <a class="nav-link dropdown-toggle" href="#" id="companyDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-building"></i> Hãng
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="/products/CompanyList/1">Bandai</a></li>
-                            <li><a class="dropdown-item" href="/products/CompanyList/2">Max Factory</a></li>
-                            <li><a class="dropdown-item" href="/products/CompanyList/3">Good Smile</a></li>
-                            <li><a class="dropdown-item" href="/products/CompanyList/4">Design COCO</a></li>
+                        <ul class="dropdown-menu" aria-labelledby="companyDropdown">
+                            @if (ViewBag.Companies != null)
+                            {
+                                @foreach (var company in ViewBag.Companies)
+                                {
+                                    <li><a class="dropdown-item" href="/products/CompanyList/@company.Id">@company.CompName</a></li>
+                                }
+                            }
+                            else
+                            {
+                                <li><a class="dropdown-item" href="#">Không có dữ liệu</a></li>
+                            }
                         </ul>
                     </li>
                     <li class="nav-item me-2 me-lg-0 d-none d-md-inline-block">
-                        <a class="nav-link" asp-controller="Coupon" asp-action="ShopCoupons">
+                        <a class="nav-link" asp-area="" asp-controller="Coupon" asp-action="ShopCoupons">
                             <i class="bi bi-tags"></i>
                             <span class="nav-text">Mã Giảm Giá</span>
                         </a>

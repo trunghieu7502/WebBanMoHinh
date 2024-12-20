@@ -157,6 +157,39 @@
     </div>
 </section>
 
+<section class="mt-4">
+    <section class="py-2">
+        <h2 class="section-title">
+            <hr><span>GỢI Ý SẢN PHẨM</span><hr>
+        </h2>
+    </section>
+    <div class="container px-4 px-lg-5 mt-4">
+        <div class="row gx-4 gx-lg-5 row-cols-xl-4 justify-content-center">
+            @if (ViewBag.SuggestedProducts != null && ViewBag.SuggestedProducts.Count > 0)
+            {
+                @foreach (var item in ViewBag.SuggestedProducts)
+                {
+                    <div class="col-md-3 mb-4">
+                        <div class="card">
+                            <a asp-action="Details" asp-route-id="@item.Id">
+                                <img src="@item.ImageUrl" class="card-img-top" alt="@item.Name">
+                            </a>
+                            <div class="card-body text-center">
+                                <h5 class="card-title">@item.Name</h5>
+                                <p>@item.Price.ToString("#,##0") VNĐ</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>Không có sản phẩm gợi ý nào.</p>
+            }
+        </div>
+    </div>
+</section>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const openTabs = document.querySelector('.open-tabs');

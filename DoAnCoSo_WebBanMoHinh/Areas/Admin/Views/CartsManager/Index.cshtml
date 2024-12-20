@@ -10,6 +10,9 @@
     <thead>
         <tr>
             <th>
+                ID
+            </th>
+            <th>
                 Ngày Đặt
             </th>
             <th>
@@ -46,8 +49,12 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model.OrderByDescending(o => o.OrderDate))
+        {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.OrderDate)
             </td>

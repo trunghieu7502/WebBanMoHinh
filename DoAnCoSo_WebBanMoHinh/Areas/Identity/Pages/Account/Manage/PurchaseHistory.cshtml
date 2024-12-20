@@ -1,0 +1,47 @@
+﻿@page
+@model DoAnCoSo_WebBanMoHinh.Areas.Identity.Pages.Account.Manage.PurchaseHistoryModel
+@{   
+    ViewData["ActivePage"] = "PurchaseHistory";
+}
+
+<h3>@ViewData["Title"]</h3>
+
+@if (Model == null || !Model.Orders.Any())
+{
+    <p>Bạn chưa có đơn hàng nào.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Mã đơn hàng</th>
+                <th>Ngày đặt hàng</th>
+                <th>Sản phẩm</th>
+                <th>Tổng tiền</th>
+                <th>Địa chỉ giao hàng</th>
+                <th>Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model.Orders)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@order.OrderDate.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        <ul>
+                            @foreach (var detail in order.OrderDetails)
+                            {
+                                <li>@detail.Product.Name</li>
+                            }
+                        </ul>
+                    </td>
+                    <td>@order.TotalPrice.ToString("N0") đ</td>
+                    <td>@order.ShippingAddress, @order.Ward, @order.District, @order.City</td>
+                    <td>@(order.IsDone ? "Hoàn thành" : "Đang xử lý")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

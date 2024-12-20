@@ -73,6 +73,32 @@
         </dd>
     </dl>
 </div>
+<hr />
+<div>
+    <h4 class="mt-4">Sản Phẩm Đã Mua</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tên Sản Phẩm</th>
+                <th>Số Lượng</th>
+                <th>Giá</th>
+                <th>Tổng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderDetails)
+            {
+                <tr>
+                    <td>@item.Product.Name</td>
+                    <td>@item.Quantity</td>
+                    <td>@string.Format("{0:0,0}", item.Price) VNĐ</td>
+                    <td>@string.Format("{0:0,0}", item.Quantity * item.Price) VNĐ</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
 <div>
     <a asp-area="Admin" asp-controller="CartsManager" asp-action="Index">
         <button class="btn btn-outline-dark flex-shrink-0" type="button">
