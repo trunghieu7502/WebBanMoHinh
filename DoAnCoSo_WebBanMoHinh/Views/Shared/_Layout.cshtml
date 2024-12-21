@@ -20,7 +20,7 @@
                             <img src="~/images/Beyblade_X_Logo.png" alt="BeybladeX" width="180" height="70">
                         </a>
                     </div>
-					<div class="col-md-4">
+                    <div class="col-md-4">
                         @using (Html.BeginForm("SearchProducts", "Products", FormMethod.Get))
                         {
                             <div class="input-group pt-4">
@@ -28,13 +28,15 @@
                                 <button class="btn btn-outline-light" type="submit"> <i class="bi-search"></i> </button>
                             </div>
                         }
-                    </div>                   
+                    </div>
                     <div class="col-md-4 d-flex justify-content-center justify-content-md-end align-items-center">
-                        <a href="/Products/FavoriteList" class="btn btn-outline-light me-2 hover-button" role="button" style="color: white;">
-                            <i class="bi bi-heart-fill me-1"></i> Yêu Thích
-                        </a>
                         <form class="d-flex me-2">
-                            <button class="btn btn-outline-light" type="submit" asp-controller="ShoppingCart" asp-action="Index">
+                            <button class="btn btn-outline-light hover-button" type="submit" asp-controller="Products" asp-action="FavoriteList">
+                                <i class="bi bi-heart-fill me-1"></i> Yêu Thích
+                            </button>
+                        </form>
+                        <form class="d-flex me-2">
+                            <button class="btn btn-outline-light hover-button" type="submit" asp-controller="ShoppingCart" asp-action="Index">
                                 <i class="bi-cart-fill me-1 fa fa-shopping-cart cart-icon">
                                     <span class="cart-badge" id="cartCount">0</span>Giỏ Hàng
                                 </i>
@@ -48,70 +50,75 @@
             </div>
         </div>
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow p-3 mb-5 rounded">
-            <div class="container justify-content-center justify-content-md-between">
-                <ul class="navbar-nav flex-row">
-                    <li class="nav-item me-2 me-lg-0 d-none d-md-inline-block">
-                        <a class="nav-link" href="/">
-                            <i class="bi bi-house"></i>
-                            <span class="nav-text">Trang Chủ</span>
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown me-2 me-lg-0">
-                        <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-box"></i> Sản Phẩm
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
-                            <li><a class="dropdown-item" href="/products/ProductList">Toàn bộ sản phẩm</a></li>
-                            @if (ViewBag.Categories != null)
-                            {
-                                @foreach (var category in ViewBag.Categories)
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">
+                                <i class="bi bi-house"></i>
+                                <span class="nav-text">Trang Chủ</span>
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-box"></i> Sản Phẩm
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                                <li><a class="dropdown-item" href="/products/ProductList">Toàn bộ sản phẩm</a></li>
+                                @if (ViewBag.Categories != null)
                                 {
-                                    <li><a class="dropdown-item" href="/products/CategoryList/@category.Id">@category.CateName</a></li>
+                                    @foreach (var category in ViewBag.Categories)
+                                    {
+                                        <li><a class="dropdown-item" href="/products/CategoryList/@category.Id">@category.CateName</a></li>
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                <li><a class="dropdown-item" href="#">Không có dữ liệu</a></li>
-                            }
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown me-2 me-lg-0">
-                        <a class="nav-link dropdown-toggle" href="#" id="companyDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-building"></i> Hãng
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="companyDropdown">
-                            @if (ViewBag.Companies != null)
-                            {
-                                @foreach (var company in ViewBag.Companies)
+                                else
                                 {
-                                    <li><a class="dropdown-item" href="/products/CompanyList/@company.Id">@company.CompName</a></li>
+                                    <li><a class="dropdown-item" href="#">Không có dữ liệu</a></li>
                                 }
-                            }
-                            else
-                            {
-                                <li><a class="dropdown-item" href="#">Không có dữ liệu</a></li>
-                            }
-                        </ul>
-                    </li>
-                    <li class="nav-item me-2 me-lg-0 d-none d-md-inline-block">
-                        <a class="nav-link" asp-area="" asp-controller="Coupon" asp-action="ShopCoupons">
-                            <i class="bi bi-tags"></i>
-                            <span class="nav-text">Mã Giảm Giá</span>
-                        </a>
-                    </li>
-                    <li class="nav-item me-2 me-lg-0 d-none d-md-inline-block">
-                        <a class="nav-link" href="/about">
-                            <i class="bi bi-info-circle"></i>
-                            <span class="nav-text">Giới Thiệu</span>
-                        </a>
-                    </li>
-                    <li class="nav-item me-2 me-lg-0 d-none d-md-inline-block">
-                        <a class="nav-link" href="#footer">
-                            <i class="bi bi-envelope"></i>
-                            <span class="nav-text">Liên Hệ</span>
-                        </a>
-                    </li>
-                </ul>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="companyDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-building"></i> Hãng
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="companyDropdown">
+                                @if (ViewBag.Companies != null)
+                                {
+                                    @foreach (var company in ViewBag.Companies)
+                                    {
+                                        <li><a class="dropdown-item" href="/products/CompanyList/@company.Id">@company.CompName</a></li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li><a class="dropdown-item" href="#">Không có dữ liệu</a></li>
+                                }
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Coupon" asp-action="ShopCoupons">
+                                <i class="bi bi-tags"></i>
+                                <span class="nav-text">Mã Giảm Giá</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/about">
+                                <i class="bi bi-info-circle"></i>
+                                <span class="nav-text">Giới Thiệu</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#footer">
+                                <i class="bi bi-envelope"></i>
+                                <span class="nav-text">Liên Hệ</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </nav>
     </header>
@@ -122,87 +129,87 @@
         </main>
     </div>
 
-	<footer class="mg-0 pd-bt-50-mb mt-5" id="footer">
-		<div class="top-ft-wanda">
-			<div class="container">
-				<div class="d-flex row mt-2 pt-4">
-					<div class="col-md-3 col-sm-6 col-xs-12 infomation mg-bottom-15">
+    <footer class="mg-0 pd-bt-50-mb mt-5" id="footer">
+        <div class="top-ft-wanda">
+            <div class="container">
+                <div class="d-flex row mt-2 pt-4">
+                    <div class="col-md-3 col-sm-6 col-xs-12 infomation mg-bottom-15">
                         <div class="fb-page" data-href="https://www.facebook.com/xbladersvietnam24/?ref=embed_page" data-tabs="" data-width="" data-height="" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/jhfigure/?ref=embed_page" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/jhfigure/?ref=embed_page">JH Figure</a></blockquote></div>
-						<div class="infomation-wanda">
-							<p>
-								21DTHFigure - Mô hình anime chính hãng
-							</p>
-							<ul>
-								<li><i class="fa fa-map-marker" aria-hidden="true"></i> Trường Hutech</li>
-								<li><i class="fa fa-phone" aria-hidden="true"></i> <a rel="nofollow" href="tel:">177013</a></li>
-								<li><i class="fa fa-envelope-o" aria-hidden="true"></i> <a rel="nofollow" href="mailto:contact@jhfigure.com">21dthfigure@gmail.com</a></li>
-							</ul>
-						</div>
-					</div>
-					<div class="col-md-3 col-sm-6 col-xs-6 tablink mg-bottom-15">
-						<div class="title-footer">
-							<div class="h4">
-								Chính sách
-							</div>
-						</div>
-						<div class="footer-link-wanda">
-							<ul>
-								<li><a href="/search">Tìm kiếm</a></li>
-								<li><a href="/pages/about-us">Giới thiệu</a></li>
-								<li><a href="#">Chính sách giao hàng & đổi trả</a></li>
-								<li><a href="#">Chính sách bảo mật</a></li>
-								<li><a href="#">Điều khoản dịch vụ</a></li>
-								<li><a href="#">Liên hệ</a></li>
-							</ul>
-						</div>
-					</div>
-					<div class="col-md-3 col-sm-6 col-xs-12 tablink mg-bottom-15">
-						<div class="title-footer">
-							<div class="h4">
-								Hướng dẫn
-							</div>
-						</div>
-						<div class="footer-link-wanda">
-							<ul>
-								<li><a href="/blogs/news">Danh mục blog</a></li>
-							</ul>
-						</div>
-					</div>
-					<div class="col-md-3 col-sm-6 col-xs-12">
-						<div class="title-footer">
-							<div class="h4">
-								Tổng đài hỗ trợ
-							</div>
-						</div>
-						<ul class="footer-support">
-							<li><span>Gọi mua hàng:</span> <a href="tel:">911 </a> <span></span></li>
-							<li><span>Gọi bảo hành:</span> <a href="tel: ">113 </a> <span></span></li>
-							<li><span>Gọi hợp tác kinh doanh, mua sỉ:</span> <a href="tel:">0000</a> <span></span></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="copyright-wanda">
-			<div class="container">
-				<div class="row ">
-					<div class="col-md-12 text-center">
-						<div class="text-copyright"><span>© Copyright 2024 By <a href="/" target="_blank" class="underline_hover link"> 21DTHD2 Figure.</a><a target="_blank" rel="nofollow" href="https://www.facebook.com/USS.ThanhDat"> Powered by ĐHD</a></span></div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</footer>
-	<div class="modal" id="pro-qv-wanda"></div>
-	<div id="pro-quickview-mobile"></div>
-	<div class="fixed-action-btn">
-	<div id="fb-root"></div>
-	<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v20.0" nonce="Cbrad0Mp"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+                        <div class="infomation-wanda">
+                            <p>
+                                21DTHFigure - Mô hình anime chính hãng
+                            </p>
+                            <ul>
+                                <li><i class="fa fa-map-marker" aria-hidden="true"></i> Trường Hutech</li>
+                                <li><i class="fa fa-phone" aria-hidden="true"></i> <a rel="nofollow" href="tel:">177013</a></li>
+                                <li><i class="fa fa-envelope-o" aria-hidden="true"></i> <a rel="nofollow" href="mailto:contact@jhfigure.com">21dthfigure@gmail.com</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-6 tablink mg-bottom-15">
+                        <div class="title-footer">
+                            <div class="h4">
+                                Chính sách
+                            </div>
+                        </div>
+                        <div class="footer-link-wanda">
+                            <ul>
+                                <li><a href="/search">Tìm kiếm</a></li>
+                                <li><a href="/pages/about-us">Giới thiệu</a></li>
+                                <li><a href="#">Chính sách giao hàng & đổi trả</a></li>
+                                <li><a href="#">Chính sách bảo mật</a></li>
+                                <li><a href="#">Điều khoản dịch vụ</a></li>
+                                <li><a href="#">Liên hệ</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12 tablink mg-bottom-15">
+                        <div class="title-footer">
+                            <div class="h4">
+                                Hướng dẫn
+                            </div>
+                        </div>
+                        <div class="footer-link-wanda">
+                            <ul>
+                                <li><a href="/blogs/news">Danh mục blog</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        <div class="title-footer">
+                            <div class="h4">
+                                Tổng đài hỗ trợ
+                            </div>
+                        </div>
+                        <ul class="footer-support">
+                            <li><span>Gọi mua hàng:</span> <a href="tel:">911 </a> <span></span></li>
+                            <li><span>Gọi bảo hành:</span> <a href="tel: ">113 </a> <span></span></li>
+                            <li><span>Gọi hợp tác kinh doanh, mua sỉ:</span> <a href="tel:">0000</a> <span></span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copyright-wanda">
+            <div class="container">
+                <div class="row ">
+                    <div class="col-md-12 text-center">
+                        <div class="text-copyright"><span>© Copyright 2024 By <a href="/" target="_blank" class="underline_hover link"> 21DTHD2 Figure.</a><a target="_blank" rel="nofollow" href="https://www.facebook.com/USS.ThanhDat"> Powered by ĐHD</a></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <div class="modal" id="pro-qv-wanda"></div>
+    <div id="pro-quickview-mobile"></div>
+    <div class="fixed-action-btn">
+        <div id="fb-root"></div>
+        <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v20.0" nonce="Cbrad0Mp"></script>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
 
