@@ -62,12 +62,16 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             ViewBag.SuggestedProducts = suggestedProducts;
             ViewBag.FavoriteProducts = product.FavoriteProducts;
             ViewBag.CompareProducts = product.CompareProducts;
+            ViewBag.Categories = await _context.Categories.ToListAsync();
+            ViewBag.Companies = await _context.Companies.ToListAsync();
             return View(product);
         }
 
         public async Task<IActionResult> SearchProductsAsync(string query)
         {
             var products = await _productRepository.GetAllAsync();
+            ViewBag.Categories = await _context.Categories.ToListAsync();
+            ViewBag.Companies = await _context.Companies.ToListAsync();
             try
             {
                 if (string.IsNullOrWhiteSpace(query))
@@ -87,6 +91,8 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             int pageSize = 8;
             IQueryable<Product> productsQuery = _context.Products.Include(p => p.Category).Include(x => x.Company);
             var paginatedProducts = await PaginatedList<Product>.CreateAsync((IQueryable<Product>)productsQuery, pageNumber, pageSize);
+            ViewBag.Categories = await _context.Categories.ToListAsync();
+            ViewBag.Companies = await _context.Companies.ToListAsync();
             return View(paginatedProducts);
         }
 
@@ -102,6 +108,8 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
                 return NotFound();
             }
             var products = await _context.Products.Include(p => p.Category).Include(x => x.Company).ToListAsync();
+            ViewBag.Categories = await _context.Categories.ToListAsync();
+            ViewBag.Companies = await _context.Companies.ToListAsync();
             return View(category);
         }
 
@@ -117,6 +125,8 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
                 return NotFound();
             }
             var products = await _context.Products.Include(p => p.Category).Include(x => x.Company).ToListAsync();
+            ViewBag.Categories = await _context.Categories.ToListAsync();
+            ViewBag.Companies = await _context.Companies.ToListAsync();
             return View(company);
         }
 
@@ -128,6 +138,8 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
                 return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
 
+            ViewBag.Categories = await _context.Categories.ToListAsync();
+            ViewBag.Companies = await _context.Companies.ToListAsync();
             var favoriteProducts = await _context.FavoriteProducts
                 .Include(fp => fp.Product)
                 .ThenInclude(p => p.Category)
@@ -186,6 +198,8 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
                 return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
 
+            ViewBag.Categories = await _context.Categories.ToListAsync();
+            ViewBag.Companies = await _context.Companies.ToListAsync();
             var compareProducts = await _context.CompareProducts
                 .Include(fp => fp.Product)
                 .ThenInclude(p => p.Category)

@@ -51,13 +51,17 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new ShoppingCart();
             cart.AddItem(cartItem);
             HttpContext.Session.SetObjectAsJson("Cart", cart);
+            ViewBag.Categories = await _context.Categories.ToListAsync();
+            ViewBag.Companies = await _context.Companies.ToListAsync();
             return RedirectToAction("Index");
         }
 
         // GET: ShoppingCartController
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new ShoppingCart();
+            ViewBag.Categories = await _context.Categories.ToListAsync();
+            ViewBag.Companies = await _context.Companies.ToListAsync();
             if (!cart.Items.Any())
             {
                 ViewData["DiscountAmount"] = 0;
@@ -98,6 +102,8 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
         public async Task<IActionResult> Checkout()
         {
             var user = await _userManager.GetUserAsync(User);
+            ViewBag.Categories = await _context.Categories.ToListAsync();
+            ViewBag.Companies = await _context.Companies.ToListAsync();
             var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new ShoppingCart();
             if (cart.Items.Count == 0)
             {
@@ -237,14 +243,18 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             return View("OrderCompleted", order);
         }
 
-        public IActionResult PaymentSuccess()
+        public async Task<IActionResult> PaymentSuccess()
         {
+            ViewBag.Categories = await _context.Categories.ToListAsync();
+            ViewBag.Companies = await _context.Companies.ToListAsync();
             return View("OrderCompleted");
         }
 
         [Authorize]
-        public IActionResult PaymentFail()
+        public async Task<IActionResult> PaymentFail()
         {
+            ViewBag.Categories = await _context.Categories.ToListAsync();
+            ViewBag.Companies = await _context.Companies.ToListAsync();
             return View();
         }
 

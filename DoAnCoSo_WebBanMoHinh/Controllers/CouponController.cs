@@ -16,7 +16,7 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult ShopCoupons()
+        public async Task<IActionResult> ShopCoupons()
         {
             var coupons = _context.Coupons
                 .Where(c => c.RedeemedBy == null && c.ExpirationDate > DateTime.Now)
@@ -57,7 +57,8 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             ViewData["RedeemedCoupons"] = redeemedCoupons;
             var user = _context.Users.FirstOrDefault(u => u.UserName == userName);
             ViewData["UserPoints"] = user?.Points ?? 0;
-
+            ViewBag.Categories = await _context.Categories.ToListAsync();
+            ViewBag.Companies = await _context.Companies.ToListAsync();
             return View(coupons);
         }
 
