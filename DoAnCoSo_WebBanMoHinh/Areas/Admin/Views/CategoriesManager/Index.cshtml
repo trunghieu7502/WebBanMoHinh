@@ -6,33 +6,34 @@
 
 <h1 class="text-center mt-4">DANH SÁCH LOẠI SẢN PHẨM</h1>
 
-<table class="table">
-    <thead>
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.CateName)
             </th>
-            <th></th>
+            <th class="text-center">Hành Động</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CateName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">
-                    <button class="btn btn-warning">Sửa</button>
-                </a>
-                <a asp-action="Details" asp-route-id="@item.Id">
-                    <button class="btn btn-primary">Chi Tiết</button>
-                </a>
-                <a asp-action="Delete" asp-route-id="@item.Id">
-                    <button class="btn btn-danger">Xóa</button>
-                </a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CateName)
+                </td>
+                <td class="text-center">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+                        <i class="fas fa-edit"></i> Sửa
+                    </a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
+                        <i class="fas fa-eye"></i> Chi Tiết
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash-alt"></i> Xóa
+                    </a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

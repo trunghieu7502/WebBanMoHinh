@@ -5,99 +5,76 @@
     ViewData["Title"] = $"{pname} - Admin";
 }
 
-<div>
-    <h4 class="mt-4">CHI TIẾT - @Html.DisplayFor(model => model.CompName)</h4>
+<div class="container">
+    <h4 class="mt-4 text-center">Chi Tiết Hãng: @Html.DisplayFor(model => model.CompName)</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CompName)
+    <dl class="row justify-content-center">
+        <dt class="col-sm-3 fw-bold">
+            Tên Hãng:
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-9">
             @Html.DisplayFor(model => model.CompName)
         </dd>
     </dl>
-</div>
-<div class="d-flex">
-    <a asp-action="Edit" asp-route-id="@Model.Id">
-        <button class="btn btn-warning me-2">Sửa</button>
-    </a>
-    <a asp-area="Admin" asp-controller="CompaniesManager" asp-action="Index">
-        <button class="btn btn-outline-dark flex-shrink-0" type="button">
-            Trở Về
-        </button>
-    </a>
-</div>
-<br />
+    <div class="d-flex justify-content-center mb-4">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2">
+            <i class="fas fa-edit"></i> Sửa
+        </a>
+        <a asp-area="Admin" asp-controller="CompaniesManager" asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Trở Về
+        </a>
+    </div>
 
-<h4 class="mt-4">DANH SÁCH SẢN PHẨM - @Html.DisplayFor(model => model.CompName)</h4>
-<hr />
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Tên
-            </th>
-            <th>
-                Giá
-            </th>
-            <th>
-                Tồn
-            </th>
-            <th>
-                Trạng Thái
-            </th>
-            <th>
-                Ảnh Đại Diện
-            </th>
-            <th>
-                Hãng
-            </th>
-            <th>
-                Loại
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Products)
-        {
-            if (item.CategoryId == Model.Id)
-            {
+    <h4 class="mt-4 text-center">Danh Sách Sản Phẩm Thuộc Hãng: @Html.DisplayFor(model => model.CompName)</h4>
+    <hr />
+    @if (Model.Products == null || !Model.Products.Any())
+    {
+        <div class="alert alert-warning text-center" role="alert">
+            <h5>Không có sản phẩm nào thuộc hãng này.</h5>
+        </div>
+    }
+    else
+    {
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        <p>@item.Price.ToString("#,##0") VNĐ</p>
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Stock)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
-                    <td>
-                        <img src="@item.ImageUrl" class="card-img-top" alt="..." style="height: 100px">
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Company.CompName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Category.CateName)
-                    </td>
-                    <td>
-                        <a asp-area="Admin" asp-controller="ProductsManager" asp-action="Edit" asp-route-id="@item.Id">
-                            <button class="btn btn-warning">Sửa</button>
-                        </a>
-                        <a asp-area="Admin" asp-controller="ProductsManager" asp-action="Details" asp-route-id="@item.Id">
-                            <button class="btn btn-primary">Chi Tiết</button>
-                        </a>
-                        <a asp-area="Admin" asp-controller="ProductsManager" asp-action="Delete" asp-route-id="@item.Id">
-                            <button class="btn btn-danger">Xóa</button>
-                        </a>
-                    </td>
+                    <th>Tên</th>
+                    <th>Giá</th>
+                    <th>Tồn</th>
+                    <th>Trạng Thái</th>
+                    <th class="text-center">Ảnh Đại Diện</th>
+                    <th>Hãng</th>
+                    <th>Loại</th>
+                    <th class="text-center">Hành Động</th>
                 </tr>
-            }
-        }
-    </tbody>
-</table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Products)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td>@item.Price.ToString("#,##0") VNĐ</td>
+                        <td>@Html.DisplayFor(modelItem => item.Stock)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                        <td class="text-center">
+                            <img src="@item.ImageUrl" class="rounded" alt="..." style="height: 100px; width: auto;">
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.Company.CompName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Category.CateName)</td>
+                        <td class="text-center">
+                            <a asp-area="Admin" asp-controller="ProductsManager" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+                                <i class="fas fa-edit"></i> Sửa
+                            </a>
+                            <a asp-area="Admin" asp-controller="ProductsManager" asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye"></i> Chi Tiết
+                            </a>
+                            <a asp-area="Admin" asp-controller="ProductsManager" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash-alt"></i> Xóa
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

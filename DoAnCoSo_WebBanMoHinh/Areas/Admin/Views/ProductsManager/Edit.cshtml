@@ -4,69 +4,113 @@
     ViewData["Title"] = "Sửa Sản Phẩm";
 }
 
-<h4>Chỉnh sửa sản phẩm</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control" rows="5" cols="60" placeholder="Nhập Mô Tả"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImageUrl" class="control-label"></label>
-                <input type="file" accept="image/*" asp-for="ImageUrl" class="form-control" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Images" class="control-label"></label>
-                <input type="file" accept="image/*" multiple asp-for="Images" class="form-control" />
-                <span asp-validation-for="Images" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Stock" class="control-label"></label>
-                <input asp-for="Stock" class="form-control" />
-                <span asp-validation-for="Stock" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Status" /> @Html.DisplayNameFor(model => model.Status)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="CategoryId" class="control-label">Loại</label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.Categories"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="CompanyId" class="control-label">Hãng</label>
-                <select asp-for="CompanyId" class="form-control" asp-items="ViewBag.Companies"></select>
-            </div>
-            <br />
-            <div class="d-flex form-group">
-                <input type="submit" value="Sửa" class="btn btn-primary me-2" />
-                <a asp-area="Admin" asp-controller="ProductsManager" asp-action="Index">
-                    <button class="btn btn-outline-dark flex-shrink-0" type="button">
-                        Trở Về
+<div class="container">
+    <h4 class="mt-4 text-center">Chỉnh Sửa Sản Phẩm</h4>
+    <hr />
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form asp-action="Edit" enctype="multipart/form-data" class="shadow p-4 rounded bg-light">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                <div class="form-group mb-3">
+                    <label asp-for="Name" class="form-label fw-bold">Tên Sản Phẩm</label>
+                    <input asp-for="Name" class="form-control" placeholder="Nhập tên sản phẩm..." />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Price" class="form-label fw-bold">Giá</label>
+                    <input asp-for="Price" class="form-control" placeholder="Nhập giá sản phẩm..." />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Description" class="form-label fw-bold">Mô Tả</label>
+                    <textarea asp-for="Description" class="form-control" rows="5" placeholder="Nhập mô tả sản phẩm..."></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="ImageUrl" class="form-label fw-bold">Ảnh Chính</label>
+                    <div class="mb-3">
+                        <img id="mainImagePreview" src="@Model.ImageUrl" class="rounded shadow-sm" style="height: 150px; width: auto;" alt="Ảnh hiện tại">
+                    </div>
+                    <input type="file" accept="image/*" asp-for="ImageUrl" class="form-control" onchange="previewImage(event, 'mainImagePreview')" />
+                    <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Images" class="form-label fw-bold">Ảnh Phụ</label>
+                    <div class="row mb-3" id="additionalImagesPreview">
+                        @if (Model.Images != null && Model.Images.Any())
+                        {
+                            foreach (var image in Model.Images)
+                            {
+                                <div class="col-md-3 mb-3">
+                                    <img src="@image.Url" class="rounded shadow-sm" style="height: 100px; width: auto;" alt="Ảnh phụ hiện tại">
+                                </div>
+                            }
+                        }
+                    </div>
+                    <input type="file" accept="image/*" multiple asp-for="Images" class="form-control" onchange="previewAdditionalImages(event, 'additionalImagesPreview')" />
+                    <span asp-validation-for="Images" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Stock" class="form-label fw-bold">Số Lượng</label>
+                    <input asp-for="Stock" class="form-control" placeholder="Nhập số lượng..." />
+                    <span asp-validation-for="Stock" class="text-danger"></span>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" asp-for="Status" />
+                    <label class="form-check-label" asp-for="Status">Trạng Thái</label>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="CategoryId" class="form-label fw-bold">Loại Sản Phẩm</label>
+                    <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.Categories"></select>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="CompanyId" class="form-label fw-bold">Hãng</label>
+                    <select asp-for="CompanyId" class="form-control" asp-items="ViewBag.Companies"></select>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Lưu
                     </button>
-                </a>
-            </div>
-        </form>
+                    <a asp-area="Admin" asp-controller="ProductsManager" asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left"></i> Trở Về
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-<br />
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<script>
+    function previewImage(event, previewId) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById(previewId).src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function previewAdditionalImages(event, previewContainerId) {
+        const files = event.target.files;
+        const container = document.getElementById(previewContainerId);
+        container.innerHTML = ""; // Clear existing previews
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.classList.add('rounded', 'shadow-sm');
+                    img.style.height = '100px';
+                    img.style.width = 'auto';
+                    img.classList.add('me-2', 'mb-2');
+                    container.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    }
+</script>

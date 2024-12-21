@@ -324,5 +324,12 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public IActionResult GetCartCount()
+        {
+            var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new ShoppingCart();
+            int cartCount = cart.Items.Sum(i => i.Quantity);
+            return Json(new { count = cartCount });
+        }
     }
 }

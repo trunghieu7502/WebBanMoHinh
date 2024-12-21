@@ -30,12 +30,14 @@
                         }
                     </div>                   
                     <div class="col-md-4 d-flex justify-content-center justify-content-md-end align-items-center">
-                        <a href="/Products/FavoriteList" class="btn btn-outline-light me-2" style="color: white;">
+                        <a href="/Products/FavoriteList" class="btn btn-outline-light me-2 hover-button" role="button" style="color: white;">
                             <i class="bi bi-heart-fill me-1"></i> Yêu Thích
                         </a>
                         <form class="d-flex me-2">
                             <button class="btn btn-outline-light" type="submit" asp-controller="ShoppingCart" asp-action="Index">
-                                <i class="bi-cart-fill me-1"> Giỏ Hàng</i>
+                                <i class="bi-cart-fill me-1 fa fa-shopping-cart cart-icon">
+                                    <span class="cart-badge" id="cartCount">0</span>Giỏ Hàng
+                                </i>
                             </button>
                         </form>
                         <div class="d-flex">
@@ -203,3 +205,15 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+<script>
+    function updateCartCount() {
+        fetch('/ShoppingCart/GetCartCount')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('cartCount').textContent = data.count;
+            })
+            .catch(error => console.error('Error updating cart count:', error));
+    }
+    document.addEventListener('DOMContentLoaded', updateCartCount);
+</script>

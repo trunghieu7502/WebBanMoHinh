@@ -4,35 +4,34 @@
     ViewData["Title"] = "Hãng";
 }
 
-<h1 class="text-center mt-4">DANH SÁCH HÃNG</h1>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CompName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CompName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">
-                    <button class="btn btn-warning">Sửa</button>
-                </a>
-                <a asp-action="Details" asp-route-id="@item.Id">
-                    <button class="btn btn-primary">Chi Tiết</button>
-                </a>
-                <a asp-action="Delete" asp-route-id="@item.Id">
-                    <button class="btn btn-danger">Xóa</button>
-                </a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="container">
+    <h1 class="text-center mt-4">Danh Sách Hãng</h1>
+    <hr />
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Tên Hãng</th>
+                <th class="text-center">Hành Động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.CompName)</td>
+                    <td class="text-center">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i> Sửa
+                        </a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
+                            <i class="fas fa-eye"></i> Chi Tiết
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash-alt"></i> Xóa
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

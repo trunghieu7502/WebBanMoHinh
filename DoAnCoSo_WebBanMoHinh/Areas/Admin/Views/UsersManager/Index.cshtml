@@ -4,42 +4,46 @@
     ViewData["Title"] = "Người Dùng";
 }
 
-<h1 class="text-center mt-4">DANH SÁCH NGƯỜI DÙNG</h1>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Email</th>
-            <th>Địa Chỉ</th>
-            <th>Số Điện Thoại</th>
-            <th>Chức vụ</th>
-            <th>Tình trạng khóa</th>
-            <th>Hành Động</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var userRole in Model)
-        {
+<div class="container mt-5">
+    <h1 class="text-center">Danh Sách Người Dùng</h1>
+    <hr />
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
             <tr>
-                <td>@userRole.User.Email</td>
-                <td>@userRole.User.Address</td>
-                <td>@userRole.User.PhoneNumber</td>
-                <td><span>@userRole.Role</span></td>
-                <td>@(userRole.User.LockoutEnd.HasValue ? "Khóa tới " + userRole.User.LockoutEnd.Value.ToString("f") : "Không")</td>
-                <td>
-                    <form method="post" asp-area="Admin" asp-controller="UsersManager" asp-action="RoleChange" asp-route-userId="@userRole.User.Id">
-                        <select name="role">
-                            <option value="@WebRoles.Role_Customer">Customer</option>
-                            <option value="@WebRoles.Role_Admin">Admin</option>
-                        </select>
-                        <button type="submit">Đổi chức vụ</button>
-                    </form>
-                    <form method="post" asp-area="Admin" asp-controller="UsersManager" asp-action="Lockout" asp-route-userId="@userRole.User.Id">
-                        <input type="text" name="lockoutDuration" placeholder="Thời hạn (theo ngày)" />
-                        <button type="submit">Khóa</button>
-                    </form>
-                </td>
+                <th>Email</th>
+                <th>Địa Chỉ</th>
+                <th>Số Điện Thoại</th>
+                <th>Chức Vụ</th>
+                <th>Tình Trạng Khóa</th>
+                <th class="text-center">Hành Động</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var userRole in Model)
+            {
+                <tr>
+                    <td>@userRole.User.Email</td>
+                    <td>@userRole.User.Address</td>
+                    <td>@userRole.User.PhoneNumber</td>
+                    <td><span class="badge bg-info text-dark">@userRole.Role</span></td>
+                    <td>@(userRole.User.LockoutEnd.HasValue ? "Khóa tới " + userRole.User.LockoutEnd.Value.ToString("f") : "Không")</td>
+                    <td class="text-center">
+                        <div class="btn-group" role="group">
+                            <form method="post" asp-area="Admin" asp-controller="UsersManager" asp-action="RoleChange" asp-route-userId="@userRole.User.Id" class="d-inline">
+                                <select name="role" class="form-select form-select-sm d-inline-block w-auto">
+                                    <option value="@WebRoles.Role_Customer">Customer</option>
+                                    <option value="@WebRoles.Role_Admin">Admin</option>
+                                </select>
+                                <button type="submit" class="btn btn-warning btn-sm">Đổi Chức Vụ</button>
+                            </form>
+                            <form method="post" asp-area="Admin" asp-controller="UsersManager" asp-action="Lockout" asp-route-userId="@userRole.User.Id" class="d-inline">
+                                <input type="text" name="lockoutDuration" placeholder="Thời hạn (ngày)" class="form-control form-control-sm d-inline-block w-auto" />
+                                <button type="submit" class="btn btn-danger btn-sm">Khóa</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
