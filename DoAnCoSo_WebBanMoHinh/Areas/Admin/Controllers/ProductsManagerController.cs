@@ -193,8 +193,8 @@ namespace DoAnCoSo_WebBanMoHinh.Areas.Admin.Controllers
             {
                 if (string.IsNullOrWhiteSpace(query))
                     query = "null";
-                var result = products.Where(p => p.Name.Contains(query) ||
-                                            (p.Description != null && p.Description.Contains(query))).ToList();
+                var result = products.Where(p => p.Name.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                                            (p.Description != null && p.Description.Contains(query, StringComparison.OrdinalIgnoreCase))).ToList();
                 return View("SearchResault", result);
             }
             catch (Exception ex)
