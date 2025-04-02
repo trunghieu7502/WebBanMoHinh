@@ -94,7 +94,10 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             var findCartItem = cart.Items.FirstOrDefault(p => p.Id == id);
             if (findCartItem != null)
             {
-                findCartItem.Quantity = quantity;
+                if(quantity == 0)
+                    findCartItem.Quantity = 1;
+                else
+                    findCartItem.Quantity = quantity;
                 HttpContext.Session.SetObjectAsJson("Cart", cart);
             }
             return RedirectToAction("Index");
@@ -129,6 +132,14 @@ namespace DoAnCoSo_WebBanMoHinh.Controllers
             if (cart == null || !cart.Items.Any())
             {
                 return RedirectToAction("Index");
+            }
+            foreach (var item in cart.Items)
+            {
+                if (item.Quantity <= 0)
+                {
+                    TempData["ErrorMessage"] = "Số lượng sản phẩm không hợp lệ. Vui lòng kiểm tra lại giỏ hàng.";
+                    return RedirectToAction("Index");
+                }
             }
             var discountAmount = HttpContext.Session.GetObjectFromJson<decimal?>("DiscountAmount") ?? 0;
             var couponCode = HttpContext.Session.GetObjectFromJson<string>("CouponCode");
