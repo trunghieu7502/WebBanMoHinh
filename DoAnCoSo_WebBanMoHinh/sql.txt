@@ -1,0 +1,57 @@
+-- Create Database
+CREATE DATABASE ThesisManagementDB;
+USE ThesisManagementDB;
+
+-- Table: SinhVien (Students)
+CREATE TABLE SinhVien (
+    SinhVienID INT AUTO_INCREMENT PRIMARY KEY,
+    HoTen VARCHAR(100) NOT NULL,
+    MaSinhVien VARCHAR(20) UNIQUE NOT NULL,
+    NgaySinh DATE NOT NULL,
+    Lop VARCHAR(50) NOT NULL,
+    Email VARCHAR(100) UNIQUE NOT NULL,
+    SoDienThoai VARCHAR(15) NULL
+);
+
+-- Table: GiangVien (Advisors)
+CREATE TABLE GiangVien (
+    GiangVienID INT AUTO_INCREMENT PRIMARY KEY,
+    HoTen VARCHAR(100) NOT NULL,
+    MaGiangVien VARCHAR(20) UNIQUE NOT NULL,
+    Email VARCHAR(100) UNIQUE NOT NULL,
+    SoDienThoai VARCHAR(15) NULL,
+    BoMon VARCHAR(100) NOT NULL -- Department
+);
+
+-- Table: SinhVienGiangVienHuongDan (Student-Advisor Relationship)
+CREATE TABLE SinhVienGiangVienHuongDan (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    SinhVienID INT NOT NULL,
+    GiangVienID INT NOT NULL,
+    NgayBatDau DATE NOT NULL DEFAULT (CURDATE()),
+    GhiChu VARCHAR(255) NULL,
+    CONSTRAINT fk_sinhvien FOREIGN KEY (SinhVienID) REFERENCES SinhVien(SinhVienID) ON DELETE CASCADE,
+    CONSTRAINT fk_giangvien FOREIGN KEY (GiangVienID) REFERENCES GiangVien(GiangVienID) ON DELETE CASCADE
+);
+
+CREATE TABLE DeTai (
+    DeTaiID INT AUTO_INCREMENT PRIMARY KEY,
+    TenDeTai VARCHAR(255) NOT NULL,
+    MoTa TEXT NULL,
+    SinhVienID INT NULL,
+    GiangVienID INT NULL,
+    NgayDangKy DATE DEFAULT (CURDATE()),
+    TrangThai VARCHAR(20) NOT NULL DEFAULT 'DangCho',
+    CONSTRAINT chk_trangthai CHECK (TrangThai IN ('DangCho', 'Duyet', 'Huy')),
+    CONSTRAINT fk_detai_sinhvien FOREIGN KEY (SinhVienID) REFERENCES SinhVien(SinhVienID) ON DELETE SET NULL,
+    CONSTRAINT fk_detai_giangvien FOREIGN KEY (GiangVienID) REFERENCES GiangVien(GiangVienID) ON DELETE SET NULL
+);
+
+
+-- Bảng Tài khoản người dùng (Không có UserID)
+CREATE TABLE TaiKhoan (
+    TaiKhoanID INT AUTO_INCREMENT PRIMARY KEY,
+    TenDangNhap VARCHAR(50) UNIQUE NOT NULL,
+    MatKhau VARCHAR(255) NOT NULL,
+    LoaiTaiKhoan ENUM('admin', 'sinhvien', 'giangvien') NOT NULL
+);
